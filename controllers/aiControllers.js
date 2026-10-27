@@ -144,7 +144,6 @@ async function GenerateMatchResume(req, res) {
                 model: "gemini-2.5-flash",
                 contents: prompt,
             });
-
             const matchResult =
                 response.candidates[0].content.parts[0].text;
 
@@ -201,16 +200,13 @@ async function aiPreparation(req, res) {
         return res.render("aiPreparation");
     }
     catch (err) {
-        console.log(err);
         return res.redirect("/home");
     }
 }
 
 async function aiPreparationPostResponse(req, res) {
     try {
-        console.log("sending request")
         const prompt = req.body.prompt;
-
         const checkPrompt = prompt.trim().toLowerCase();
         const promptExist = await aiCacheModel.findOne({ prompt: checkPrompt });
 

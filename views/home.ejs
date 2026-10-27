@@ -4,56 +4,459 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>JobHunt | Home</title>
-    <link rel="stylesheet" href="/stylesheets/home.css">
+    <title>NextHire | Leading Career & Recruitment Platform</title>
     <link rel="stylesheet" href="/stylesheets/navbar.css">
+    <link rel="stylesheet" href="/stylesheets/home.css">
 </head>
 
 <body>
-    <%- include("partials/navbar")%>  
+    <%- include("partials/navbar") %>
 
-        <section class="hero">
-            <p class="tagline">No. 1 Job Hunt Website</p>
-            <h1>Search, Apply &<br>Get Your <span>Dream Job</span></h1>
-            <p class="subtitle">
-                Welcome <%= user.fullname || 'Candidate' %>! Explore exciting opportunities,
-                    apply to top companies, and track your career journey.
+    <!-- HERO SECTION -->
+    <header class="hero-section">
+        <div class="hero-container">
+            <div class="hero-badge">
+                <span class="badge-dot"></span>
+                <span>Over <%= typeof totalJobs !== 'undefined' && totalJobs > 0 ? (totalJobs + '+') : '5,000+' %> Active Opportunities</span>
+                <span class="badge-arrow">→</span>
+            </div>
+
+            <h1 class="hero-title">
+                Find Your Next Career Move at <span class="gradient-text">Top Tech Companies</span>
+            </h1>
+
+            <p class="hero-subtitle">
+                Welcome back, <strong><%= user.fullname || 'Professional' %></strong>. Discover high-growth roles matched to your skills, powered by AI resume insights and direct recruiter messaging.
             </p>
 
-            <form action="/jobs/alljobs" method="GET" class="search-bar">
-                <input type="text" name="keyword" placeholder="Find your dream jobs">
-                <button type="submit">Search</button>
+            <!-- UNIFIED OMNI SEARCH BAR -->
+            <form action="/jobs/alljobs" method="GET" class="search-box-card">
+                <div class="search-field">
+                    <span class="field-icon">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+                    </span>
+                    <input type="text" name="keyword" placeholder="Job title, keywords, or company..." autocomplete="off">
+                </div>
+
+                <div class="search-divider"></div>
+
+                <div class="search-field">
+                    <span class="field-icon">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg>
+                    </span>
+                    <select name="location">
+                        <option value="">Any Location</option>
+                        <option value="Bangalore">Bangalore</option>
+                        <option value="Pune">Pune</option>
+                        <option value="Mumbai">Mumbai</option>
+                        <option value="Delhi">Delhi / NCR</option>
+                        <option value="Hyderabad">Hyderabad</option>
+                        <option value="Remote">Remote</option>
+                    </select>
+                </div>
+
+                <div class="search-divider"></div>
+
+                <div class="search-field">
+                    <span class="field-icon">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="7" width="20" height="14" rx="2" ry="2"></rect><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"></path></svg>
+                    </span>
+                    <select name="category">
+                        <option value="">All Categories</option>
+                        <option value="Frontend">Frontend Development</option>
+                        <option value="Backend">Backend Engineering</option>
+                        <option value="Full Stack">Full Stack</option>
+                        <option value="Cloud">Cloud & DevOps</option>
+                        <option value="Data Science">Data Science & AI</option>
+                    </select>
+                </div>
+
+                <button type="submit" class="search-submit-btn">
+                    <span>Search Jobs</span>
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"></polyline></svg>
+                </button>
             </form>
-        </section>
 
-        <section class="categories">
-            <a href="/jobs/alljobs?category=Frontend">Frontend Developer</a>
-            <a href="/jobs/alljobs?category=Backend">Backend Developer</a>
-            <a href="/jobs/alljobs?category=DataEngineer">Data Engineer</a>
-            <a href="/jobs/alljobs?category=FullStack">Full Stack</a>
-        </section>
-
-        <section class="quick-actions">
-            <div class="card">
-                <h3>Browse Jobs</h3>
-                <p>Explore all available openings.</p>
-                <a href="/jobs/alljobs">View Jobs</a>
+            <!-- TRENDING SEARCH TAGS -->
+            <div class="trending-tags">
+                <span class="trending-label">Trending Searches:</span>
+                <a href="/jobs/alljobs?keyword=React" class="tag-pill">React</a>
+                <a href="/jobs/alljobs?keyword=Node.js" class="tag-pill">Node.js</a>
+                <a href="/jobs/alljobs?jobType=Remote" class="tag-pill highlight">Remote</a>
+                <a href="/jobs/alljobs?category=Full+Stack" class="tag-pill">Full Stack</a>
+                <a href="/jobs/alljobs?keyword=Python" class="tag-pill">Python</a>
+                <a href="/jobs/alljobs?keyword=DevOps" class="tag-pill">DevOps</a>
             </div>
 
-            <div class="card">
-                <h3>My Applications</h3>
-                <p>Track the jobs you have applied for.</p>
-                <a href="/applications/my">Check Status</a>
+            <!-- METRIC STATS STRIP -->
+            <div class="stats-strip">
+                <div class="stat-item">
+                    <div class="stat-number">12,500+</div>
+                    <div class="stat-desc">Active Job Listings</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-number">850+</div>
+                    <div class="stat-desc">Hiring Partners</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-number">45,000+</div>
+                    <div class="stat-desc">Placed Candidates</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-number">98.4%</div>
+                    <div class="stat-desc">Interview Match Rate</div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- TRUSTED HIRING PARTNERS -->
+    <section class="partners-section">
+        <div class="section-container">
+            <p class="partners-title">TRUSTED BY LEADING TECH ENTERPRISES & FAST-GROWING UNICORNS</p>
+            <div class="partners-logos">
+                <div class="partner-card">
+                    <span class="partner-icon g-icon">G</span>
+                    <span class="partner-name">Google</span>
+                </div>
+                <div class="partner-card">
+                    <span class="partner-icon ms-icon">MS</span>
+                    <span class="partner-name">Microsoft</span>
+                </div>
+                <div class="partner-card">
+                    <span class="partner-icon amz-icon">A</span>
+                    <span class="partner-name">Amazon</span>
+                </div>
+                <div class="partner-card">
+                    <span class="partner-icon nflx-icon">N</span>
+                    <span class="partner-name">Netflix</span>
+                </div>
+                <div class="partner-card">
+                    <span class="partner-icon meta-icon">M</span>
+                    <span class="partner-name">Meta</span>
+                </div>
+                <div class="partner-card">
+                    <span class="partner-icon str-icon">S</span>
+                    <span class="partner-name">Stripe</span>
+                </div>
+                <div class="partner-card">
+                    <span class="partner-icon ubr-icon">U</span>
+                    <span class="partner-name">Uber</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- POPULAR JOB CATEGORIES -->
+    <section class="categories-section">
+        <div class="section-container">
+            <div class="section-header">
+                <div>
+                    <span class="section-eyebrow">Career Fields</span>
+                    <h2 class="section-title">Explore Popular Categories</h2>
+                    <p class="section-subtitle">Discover positions suited for your technical stack and ambition.</p>
+                </div>
+                <a href="/jobs/alljobs" class="view-all-link">
+                    <span>Browse All Jobs</span>
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"></polyline></svg>
+                </a>
             </div>
 
-            <div class="card">
-                <h3>Profile</h3>
-                <p>Manage your account details.</p>
-                <a href="/profile">Open Profile</a>
+            <div class="category-grid">
+                <a href="/jobs/alljobs?category=Frontend" class="category-card">
+                    <div class="cat-icon-box blue">💻</div>
+                    <div class="cat-content">
+                        <h3>Frontend Developer</h3>
+                        <p>React, Next.js, Vue, UI Engineering</p>
+                    </div>
+                    <span class="cat-arrow">→</span>
+                </a>
+
+                <a href="/jobs/alljobs?category=Backend" class="category-card">
+                    <div class="cat-icon-box purple">⚙️</div>
+                    <div class="cat-content">
+                        <h3>Backend Developer</h3>
+                        <p>Node.js, Python, Java, Microservices</p>
+                    </div>
+                    <span class="cat-arrow">→</span>
+                </a>
+
+                <a href="/jobs/alljobs?category=Full+Stack" class="category-card">
+                    <div class="cat-icon-box emerald">🌐</div>
+                    <div class="cat-content">
+                        <h3>Full Stack Developer</h3>
+                        <p>End-to-end Web, MERN, Cloud architectures</p>
+                    </div>
+                    <span class="cat-arrow">→</span>
+                </a>
+
+                <a href="/jobs/alljobs?category=Cloud" class="category-card">
+                    <div class="cat-icon-box amber">☁️</div>
+                    <div class="cat-content">
+                        <h3>Cloud & DevOps</h3>
+                        <p>AWS, Azure, Docker, Kubernetes, CI/CD</p>
+                    </div>
+                    <span class="cat-arrow">→</span>
+                </a>
+
+                <a href="/jobs/alljobs?category=Data+Science" class="category-card">
+                    <div class="cat-icon-box rose">🧠</div>
+                    <div class="cat-content">
+                        <h3>Data Science & AI</h3>
+                        <p>Machine Learning, LLMs, Analytics, Python</p>
+                    </div>
+                    <span class="cat-arrow">→</span>
+                </a>
+
+                <a href="/jobs/alljobs?location=Remote" class="category-card">
+                    <div class="cat-icon-box sky">🏡</div>
+                    <div class="cat-content">
+                        <h3>Remote Positions</h3>
+                        <p>Worldwide flexible & work-from-home roles</p>
+                    </div>
+                    <span class="cat-arrow">→</span>
+                </a>
             </div>
-        </section>
-        <script src="/socket.io/socket.io.js"></script>
-       
+        </div>
+    </section>
+
+    <!-- FEATURED JOBS SECTION -->
+    <section class="featured-jobs-section">
+        <div class="section-container">
+            <div class="section-header">
+                <div>
+                    <span class="section-eyebrow">Handpicked Roles</span>
+                    <h2 class="section-title">Featured Job Opportunities</h2>
+                    <p class="section-subtitle">Verified high-priority openings from verified employers.</p>
+                </div>
+                <a href="/jobs/alljobs" class="view-all-link">
+                    <span>View All <%= typeof totalJobs !== 'undefined' ? totalJobs : '' %> Jobs</span>
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"></polyline></svg>
+                </a>
+            </div>
+
+            <div class="job-card-grid">
+                <% if (typeof featuredJobs !== 'undefined' && featuredJobs.length > 0) { %>
+                    <% featuredJobs.forEach(job => { %>
+                        <div class="premium-job-card">
+                            <div class="card-top">
+                                <div class="company-badge-box">
+                                    <div class="company-initial-badge">
+                                        <%= job.company.charAt(0).toUpperCase() %>
+                                    </div>
+                                    <div>
+                                        <div class="company-name-row">
+                                            <span class="company-name"><%= job.company %></span>
+                                            <span class="verified-icon" title="Verified Employer">✓</span>
+                                        </div>
+                                        <div class="job-location">
+                                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg>
+                                            <%= job.location %>
+                                        </div>
+                                    </div>
+                                </div>
+                                <span class="job-type-pill <%= job.jobType.toLowerCase().replace(/\s+/g, '-') %>">
+                                    <%= job.jobType %>
+                                </span>
+                            </div>
+
+                            <h3 class="job-card-title">
+                                <a href="/jobs/<%= job._id %>"><%= job.title %></a>
+                            </h3>
+
+                            <p class="job-card-desc">
+                                <%= job.description.length > 110 ? job.description.substring(0, 110) + '...' : job.description %>
+                            </p>
+
+                            <div class="job-tags-row">
+                                <span class="tag-chip">
+                                    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="7" width="20" height="14" rx="2" ry="2"></rect><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"></path></svg>
+                                    <%= job.category || 'Engineering' %>
+                                </span>
+                                <span class="tag-chip">
+                                    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 14 14"></polyline></svg>
+                                    <%= job.experienceLevel %>+ yrs exp
+                                </span>
+                            </div>
+
+                            <div class="card-footer">
+                                <div class="salary-container">
+                                    <span class="salary-amount">₹<%= Number(job.salary).toLocaleString('en-IN') %></span>
+                                    <span class="salary-period">/ year</span>
+                                </div>
+                                <div class="card-action-btns">
+                                    <a href="/jobs/<%= job._id %>" class="btn-card-details">View Details</a>
+                                    <a href="/applications/apply/<%= job._id %>" class="btn-card-apply">Apply</a>
+                                </div>
+                            </div>
+                        </div>
+                    <% }) %>
+                <% } else { %>
+                    <!-- Fallback / Empty Featured Cards -->
+                    <div class="empty-jobs-banner">
+                        <div class="empty-icon">💼</div>
+                        <h3>Explore Thousands of Open Roles</h3>
+                        <p>Search by technology, location, or company to discover your next career opportunity.</p>
+                        <a href="/jobs/alljobs" class="btn-browse-jobs">Search All Jobs</a>
+                    </div>
+                <% } %>
+            </div>
+        </div>
+    </section>
+
+    <!-- AI TOOLS SHOWCASE BANNER -->
+    <section class="ai-banner-section">
+        <div class="section-container">
+            <div class="ai-banner-card">
+                <div class="ai-banner-content">
+                    <span class="ai-pill">NextHire Intelligence</span>
+                    <h2>Accelerate Your Hiring With AI Tools</h2>
+                    <p>Hone your interview skills with real-time AI questions tailored to FAANG, unicorns, and top IT firms. Match your resume directly to job descriptions with instant scorecards.</p>
+                    <div class="ai-banner-actions">
+                        <a href="/ai/mockInterview" class="btn-ai-primary">
+                            <span>🎙️ Launch Mock Interview</span>
+                        </a>
+                        <a href="/ai/preparation" class="btn-ai-secondary">
+                            <span>📚 Interview Prep Guide</span>
+                        </a>
+                    </div>
+                </div>
+                <div class="ai-banner-graphic">
+                    <div class="ai-stat-card">
+                        <div class="ai-stat-header">
+                            <span class="ai-chip">AI Resume Match</span>
+                            <span class="ai-score">92%</span>
+                        </div>
+                        <p>High match for Senior Full Stack Engineer role</p>
+                        <div class="score-progress">
+                            <div class="score-bar" style="width: 92%;"></div>
+                        </div>
+                    </div>
+                    <div class="ai-feedback-preview">
+                        <span class="check-badge">✓</span>
+                        <div>
+                            <strong>Strong System Design Answer</strong>
+                            <p>Clear trade-off analysis between SQL and NoSQL</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- QUICK ACTIONS FOR CANDIDATE -->
+    <section class="quick-actions-section">
+        <div class="section-container">
+            <h2 class="quick-title">Candidate Command Center</h2>
+            <div class="quick-grid">
+                <a href="/jobs/alljobs" class="quick-card">
+                    <div class="quick-icon-wrap blue">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+                    </div>
+                    <div>
+                        <h3>Browse All Jobs</h3>
+                        <p>Filter by tech stack, experience, and salary</p>
+                    </div>
+                    <span class="quick-action-link">Explore →</span>
+                </a>
+
+                <a href="/applications/my" class="quick-card">
+                    <div class="quick-icon-wrap emerald">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line><polyline points="10 9 9 9 8 9"></polyline></svg>
+                    </div>
+                    <div>
+                        <h3>My Applications</h3>
+                        <p>Track statuses from Pending to Accepted</p>
+                    </div>
+                    <span class="quick-action-link">Track Status →</span>
+                </a>
+
+                <a href="/jobs/saved" class="quick-card">
+                    <div class="quick-icon-wrap purple">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m19 21-7-4-7 4V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2v16z"></path></svg>
+                    </div>
+                    <div>
+                        <h3>Saved Jobs</h3>
+                        <p>Review bookmarked roles before applying</p>
+                    </div>
+                    <span class="quick-action-link">View Saved →</span>
+                </a>
+
+                <a href="/profile" class="quick-card">
+                    <div class="quick-icon-wrap amber">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
+                    </div>
+                    <div>
+                        <h3>Professional Profile</h3>
+                        <p>Keep your resume, title & experience current</p>
+                    </div>
+                    <span class="quick-action-link">Edit Profile →</span>
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- FOOTER -->
+    <footer class="main-footer">
+        <div class="section-container">
+            <div class="footer-top">
+                <div class="footer-brand">
+                    <div class="logo">
+                        <span class="logo-icon">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><rect width="20" height="14" x="2" y="7" rx="3"></rect><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"></path></svg>
+                        </span>
+                        Next<span>Hire</span>
+                    </div>
+                    <p class="brand-bio">
+                        The modern recruitment platform connecting top talent with industry-leading employers. Powered by AI candidate screening and real-time recruiter messaging.
+                    </p>
+                </div>
+
+                <div class="footer-column">
+                    <h4>For Candidates</h4>
+                    <ul>
+                        <li><a href="/jobs/alljobs">Explore Jobs</a></li>
+                        <li><a href="/applications/my">Application Tracker</a></li>
+                        <li><a href="/jobs/saved">Saved Positions</a></li>
+                        <li><a href="/ai/preparation">Interview Preparation</a></li>
+                        <li><a href="/ai/mockInterview">AI Mock Interview</a></li>
+                    </ul>
+                </div>
+
+                <div class="footer-column">
+                    <h4>For Recruiters</h4>
+                    <ul>
+                        <li><a href="/recruiter/dashboard">Recruiter Dashboard</a></li>
+                        <li><a href="/recruiter/create">Post a Job</a></li>
+                        <li><a href="/recruiter/myjobs">Manage Job Listings</a></li>
+                        <li><a href="/recruiter/dashboard">Applicant Analytics</a></li>
+                    </ul>
+                </div>
+
+                <div class="footer-column">
+                    <h4>Categories</h4>
+                    <ul>
+                        <li><a href="/jobs/alljobs?category=Frontend">Frontend Engineering</a></li>
+                        <li><a href="/jobs/alljobs?category=Backend">Backend Architecture</a></li>
+                        <li><a href="/jobs/alljobs?category=Full+Stack">Full Stack Development</a></li>
+                        <li><a href="/jobs/alljobs?category=Cloud">Cloud & DevOps</a></li>
+                        <li><a href="/jobs/alljobs?category=Data+Science">AI & Machine Learning</a></li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="footer-bottom">
+                <p>&copy; <%= new Date().getFullYear() %> NextHire Inc. All rights reserved. Built for modern tech hiring.</p>
+                <div class="footer-links">
+                    <a href="#">Privacy Policy</a>
+                    <a href="#">Terms of Service</a>
+                    <a href="#">Security</a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script src="/socket.io/socket.io.js"></script>
 </body>
 
 </html>

@@ -2,151 +2,143 @@
 <html lang="en">
 
 <head>
-
     <meta charset="UTF-8">
-
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-    <title>AI Mock Interview</title>
-
+    <title>AI Mock Interview Session | NextHire</title>
     <link rel="stylesheet" href="/stylesheets/navbar.css">
-
     <link rel="stylesheet" href="/stylesheets/mockInterview.css">
-
 </head>
 
 <body>
-
     <%- include("partials/navbar") %>
 
-    <div class="mock-wrapper">
+    <div class="mock-page-wrapper">
+        <div class="mock-container">
+            <div class="mock-grid-layout">
+                <!-- LEFT PANEL: CONFIGURATION -->
+                <aside class="left-card">
+                    <div class="mock-header">
+                        <span class="ai-badge">Live Simulation</span>
+                        <h1 class="mock-main-title">AI Mock Interview</h1>
+                        <p class="mock-desc">
+                            Select your target role and difficulty level. Practice answering live technical questions with real-time AI feedback.
+                        </p>
+                    </div>
 
-        <!-- LEFT SECTION -->
+                    <form id="candidatePrompt" class="mock-form">
+                        <div class="input-group">
+                            <label for="inputRole">Target Role <span class="required">*</span></label>
+                            <input
+                                type="text"
+                                placeholder="e.g. Backend Developer, SRE"
+                                id="inputRole"
+                                name="role"
+                                autocomplete="off"
+                                required
+                            >
+                        </div>
 
-        <div class="left-card">
+                        <div class="input-group">
+                            <label for="inputCompany">Target Company</label>
+                            <input
+                                type="text"
+                                placeholder="e.g. Google, Amazon, Stripe"
+                                id="inputCompany"
+                                name="company"
+                                autocomplete="off"
+                            >
+                        </div>
 
-            <div class="mock-header">
+                        <div class="input-group">
+                            <label for="experience">Experience Level</label>
+                            <select id="experience" name="experience">
+                                <option value="Fresher">Fresher (0 - 1 Years)</option>
+                                <option value="Intermediate" selected>Mid-level (2 - 5 Years)</option>
+                                <option value="Experienced">Senior (5+ Years)</option>
+                            </select>
+                        </div>
 
-                <h1>AI Mock Interview</h1>
+                        <div class="input-group">
+                            <label for="difficulty">Question Difficulty</label>
+                            <select id="difficulty" name="difficulty">
+                                <option value="Easy">Easy (Fundamentals & Concepts)</option>
+                                <option value="Medium" selected>Medium (Application & Coding)</option>
+                                <option value="Hard">Hard (System Architecture & Trade-offs)</option>
+                            </select>
+                        </div>
 
-                <p>
-                    Practice role-based interview questions
-                    and get AI-powered feedback instantly.
-                </p>
+                        <button type="submit" class="start-btn">
+                            <span class="sparkle">🎙️</span>
+                            <span>Start Interview</span>
+                        </button>
+                    </form>
 
+                    <div class="tips-box">
+                        <h4>Interview Tips</h4>
+                        <ul>
+                            <li>Use the STAR method (Situation, Task, Action, Result) for behavioral questions.</li>
+                            <li>Discuss time and space complexity trade-offs for algorithms.</li>
+                        </ul>
+                    </div>
+                </aside>
+
+                <!-- RIGHT PANEL: INTERVIEW SESSION -->
+                <main class="right-card">
+                    <!-- QUESTION SECTION -->
+                    <div class="session-section">
+                        <div class="section-badge-header">
+                            <span class="badge-label">Active Question</span>
+                            <span class="badge-status">Waiting for Answer</span>
+                        </div>
+
+                        <div id="questionBox" class="question-display-card">
+                            <div class="empty-prompt-state">
+                                <div class="mic-icon">🎙️</div>
+                                <h3>Ready to begin?</h3>
+                                <p>Configure your target role on the left and click <strong>Start Interview</strong> to receive your first interview question.</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- ANSWER SECTION -->
+                    <div class="session-section">
+                        <div class="section-badge-header">
+                            <span class="badge-label">Your Answer</span>
+                        </div>
+
+                        <div class="answer-box">
+                            <textarea
+                                id="candidateAnswer"
+                                placeholder="Type your detailed answer here. Explain your reasoning, technical trade-offs, and examples..."
+                                rows="6"
+                            ></textarea>
+                            <div class="answer-actions">
+                                <button type="button" id="submitAnswerBtn" class="submit-answer-btn">
+                                    <span>Submit Answer</span>
+                                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"></polyline></svg>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- FEEDBACK SECTION -->
+                    <div class="session-section">
+                        <div class="section-badge-header">
+                            <span class="badge-label">AI Feedback & Evaluation</span>
+                        </div>
+
+                        <div id="feedbackBox" class="feedback-display-card">
+                            <div class="feedback-placeholder">
+                                Submit an answer above to receive constructive feedback, scoring, and ideal model answer suggestions.
+                            </div>
+                        </div>
+                    </div>
+                </main>
             </div>
-
-            <form id="candidatePrompt" class="mock-form">
-
-                <div class="input-group">
-
-                    <label>Enter Role</label>
-
-                    <input
-                        type="text"
-                        placeholder="Example: Backend Developer"
-                        id="inputRole"
-                        name="role"
-                        autocomplete="off"
-                    >
-
-                </div>
-
-                <div class="input-group">
-
-                    <label>Enter Company</label>
-
-                    <input
-                        type="text"
-                        placeholder="Example: Google"
-                        id="inputCompany"
-                        name="company"
-                        autocomplete="off"
-                    >
-
-                </div>
-
-                <div class="input-group">
-
-                    <label>Choose Experience Level</label>
-
-                    <select id="experience" name="experience">
-
-                        <option value="Fresher">Fresher</option>
-
-                        <option value="Intermediate">
-                            3-5 Years
-                        </option>
-
-                        <option value="Experienced">
-                            Experienced
-                        </option>
-
-                    </select>
-
-                </div>
-
-                <div class="input-group">
-
-                    <label>Choose Difficulty</label>
-
-                    <select id="difficulty" name="difficulty">
-
-                        <option value="Easy">Easy</option>
-
-                        <option value="Medium">Medium</option>
-
-                        <option value="Hard">Hard</option>
-
-                    </select>
-
-                </div>
-
-                <button type="submit" class="start-btn">
-
-                    Start Interview
-
-                </button>
-
-            </form>
-
         </div>
-
-        <!-- MIDDLE SECTION -->
-
-        <div class="middle-card">
-
-            <div id="questionBox"></div>
-
-            <div id="answerSection">
-
-                <textarea
-                    id="candidateAnswer"
-                    placeholder="Write your answer here..."
-                ></textarea>
-
-                <button id="submitAnswerBtn">
-
-                    Submit Answer
-
-                </button>
-
-            </div>
-
-        </div>
-
-        <!-- RIGHT SECTION -->
-
-        <div class="right-card">
-
-            <div id="feedbackBox"></div>
-
-        </div>
-
     </div>
 
     <script src="/javascripts/aiMockInterview.js"></script>
-
 </body>
 
 </html>

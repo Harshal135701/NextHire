@@ -1,42 +1,113 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Login - NextHire</title>
+    <title>Sign In to NextHire</title>
     <link rel="stylesheet" href="/stylesheets/login.css">
 </head>
-<body>
-    <div class="container">
-        <div class="left-panel">
-            <h1 class="logo">NextHire</h1>
-            <img src="/images/loginPage.webp" alt="Login Illustration" class="login-image">
-        </div>
 
-        <div class="right-panel">
-            <div class="login-box">
-                <h2>Login Page</h2>
+<body>
+    <div class="auth-layout">
+        <!-- LEFT BRAND SHOWCASE PANEL -->
+        <aside class="auth-brand-panel">
+            <div class="panel-content">
+                <a href="/login" class="panel-logo">
+                    <span class="logo-icon">
+                        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><rect width="20" height="14" x="2" y="7" rx="3"></rect><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"></path></svg>
+                    </span>
+                    Next<span>Hire</span>
+                </a>
+
+                <div class="panel-hero">
+                    <span class="panel-badge">Career Acceleration</span>
+                    <h2>Your Gateway to Industry-Leading Roles</h2>
+                    <p>Connect directly with top technology employers and accelerate your career with AI-powered resume and interview intelligence.</p>
+                </div>
+
+                <div class="feature-checklist">
+                    <div class="checklist-item">
+                        <span class="check-icon">✓</span>
+                        <div>
+                            <strong>Verified Company Openings</strong>
+                            <span>Browse 12,000+ screened roles with transparent compensation.</span>
+                        </div>
+                    </div>
+                    <div class="checklist-item">
+                        <span class="check-icon">✓</span>
+                        <div>
+                            <strong>Instant AI Resume Matcher</strong>
+                            <span>Evaluate fit percentage against job descriptions before applying.</span>
+                        </div>
+                    </div>
+                    <div class="checklist-item">
+                        <span class="check-icon">✓</span>
+                        <div>
+                            <strong>Direct Recruiter Messaging</strong>
+                            <span>Chat live with hiring teams without waiting on email threads.</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="social-proof-strip">
+                    <div class="avatar-group">
+                        <div class="mock-avatar a1">JD</div>
+                        <div class="mock-avatar a2">SK</div>
+                        <div class="mock-avatar a3">AL</div>
+                    </div>
+                    <span>Trusted by <strong>45,000+</strong> candidates worldwide</span>
+                </div>
+            </div>
+        </aside>
+
+        <!-- RIGHT FORM PANEL -->
+        <main class="auth-form-panel">
+            <div class="form-wrapper">
+                <div class="form-header">
+                    <div class="mobile-logo">Next<span>Hire</span></div>
+                    <h1>Welcome Back</h1>
+                    <p>Sign in to your account to continue searching, managing jobs, and chatting with recruiters.</p>
+                </div>
 
                 <% if (typeof message !== "undefined") { %>
-                    <p class="message"><%= message %></p>
+                    <div class="alert-box error">
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="8" x2="12" y2="12"></line><line x1="12" y1="16" x2="12.01" y2="16"></line></svg>
+                        <span><%= message %></span>
+                    </div>
                 <% } %>
 
-                <form action="/login" method="post">
-                    <label>Email</label>
-                    <input type="email" name="email" placeholder="Enter your email" required>
+                <form action="/login" method="post" class="auth-form">
+                    <div class="form-group">
+                        <label for="email">Work or Personal Email</label>
+                        <div class="input-wrap">
+                            <svg class="field-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path><polyline points="22,6 12,13 2,6"></polyline></svg>
+                            <input type="email" id="email" name="email" placeholder="name@company.com" required autocomplete="email">
+                        </div>
+                    </div>
 
-                    <label>Password</label>
-                    <input type="password" name="password" placeholder="Enter your password" required>
+                    <div class="form-group">
+                        <div class="label-row">
+                            <label for="password">Password</label>
+                        </div>
+                        <div class="input-wrap">
+                            <svg class="field-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg>
+                            <input type="password" id="password" name="password" placeholder="Enter your password" required autocomplete="current-password">
+                        </div>
+                    </div>
 
-                    <button type="submit">Log In</button>
+                    <button type="submit" class="auth-submit-btn">
+                        <span>Sign In</span>
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"></polyline></svg>
+                    </button>
                 </form>
 
-                <p class="register-link">
-                    Don't have an account?
-                    <a href="/register">Create an account</a>
-                </p>
+                <div class="auth-footer">
+                    <p>Don't have an account yet? <a href="/register" class="auth-link">Create an account</a></p>
+                </div>
             </div>
-        </div>
+        </main>
     </div>
 </body>
+
 </html>

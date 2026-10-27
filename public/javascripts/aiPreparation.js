@@ -1,9 +1,7 @@
-console.log("aiPreparation.js loaded")
 document.getElementById("candidatePrompt")
     .addEventListener("submit", SendPrompt);
 
 async function SendPrompt(event) {
-    console.log("form submitted")
     event.preventDefault();
 
     try {

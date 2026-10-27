@@ -4,129 +4,135 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Applicant Details</title>
-
+    <title>Candidate Review | NextHire</title>
     <link rel="stylesheet" href="/stylesheets/navbar.css">
     <link rel="stylesheet" href="/stylesheets/seeCandidate.css">
-
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 </head>
 
 <body>
-
     <%- include("partials/navbar") %>
 
+    <div class="candidate-page-wrapper">
         <div class="candidate-container">
-
+            <!-- BREADCRUMB -->
             <a href="/recruiter/<%= applicationId %>/applications" class="back-btn">
-                ← Back to Applications
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="15 18 9 12 15 6"></polyline></svg>
+                <span>Back to Applicants</span>
             </a>
 
-            <% if(typeof error !=="undefined" ) { %>
-                <p class="error-message">
+            <% if (typeof error !== "undefined") { %>
+                <div class="alert-box error">
                     <%= error %>
-                </p>
-                <% } %>
+                </div>
+            <% } %>
 
-                    <div class="candidate-card">
+            <!-- MAIN DOSSIER CARD -->
+            <div class="candidate-card">
+                <!-- CANDIDATE HEADER -->
+                <div class="candidate-header">
+                    <div class="profile-section">
+                        <% const candUser = typeof candidate !== 'undefined' && candidate ? candidate : user; %>
+                        <div class="profile-avatar">
+                            <% if (candUser && candUser.profilepic && candUser.profilepic !== '/images/default.webp') { %>
+                                <img src="<%= candUser.profilepic %>" alt="<%= candUser.fullname %>">
+                            <% } else { %>
+                                <span><%= candUser && candUser.fullname ? candUser.fullname.charAt(0).toUpperCase() : 'C' %></span>
+                            <% } %>
+                        </div>
 
-                        <div class="candidate-header">
-
-                            <div class="profile-section">
-
-                                <!-- <div class="profile-avatar">
-                                <%= user.fullname.charAt(0).toUpperCase() %>
-                            </div> -->
-
-                                <!-- <div>
-                                <h1>
-                                    <%= user.fullname %>
-                                </h1>
-
-                                <span class="candidate-role">
-                                    <%= user.occupation %>
+                        <div class="profile-meta">
+                            <div class="name-status-row">
+                                <h1 class="candidate-name"><%= candUser ? candUser.fullname : 'Candidate Dossier' %></h1>
+                                <span class="current-status-badge <%= applicant.status %>">
+                                    Status: <%= applicant.status %>
                                 </span>
-                            </div> -->
-
                             </div>
-
+                            <span class="candidate-role"><%= candUser && candUser.occupation ? candUser.occupation : 'Software Professional' %></span>
+                            <div class="meta-tags-row">
+                                <span class="meta-tag">
+                                    <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path><polyline points="22,6 12,13 2,6"></polyline></svg>
+                                    <%= candUser ? candUser.email : '' %>
+                                </span>
+                                <span class="meta-tag">
+                                    <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 14 14"></polyline></svg>
+                                    Applied on <%= new Date(applicant.createdAt).toLocaleDateString() %>
+                                </span>
+                            </div>
                         </div>
+                    </div>
+                </div>
 
-                        <div class="candidate-info">
+                <div class="section-divider"></div>
 
-                            <div class="info-box">
-                                <div class="info-top">
-                                    <h3>Experience</h3>
-                                    <span>💼</span>
-                                </div>
-
-                                <p class="info-value">
-                                    <%= user.experience %> Years
-                                </p>
-                            </div>
-
-                            <div class="info-box">
-                                <div class="info-top">
-                                    <h3>Resume</h3>
-                                    <span>📄</span>
-                                </div>
-
-                                <a href="<%= userResume %>" download class="resume-btn">
-                                    Download Resume
-                                </a>
-                                
-                            </div>
-
-                            <div class="ai-box">
-
-                                <div class="info-top">
-                                    <h3>AI Resume Match</h3>
-                                    <span>🤖</span>
-                                </div>
-
-                                <button class="match-btn" data-application-id="<%= applicant._id %>">
-                                    Check Match Percentage
-                                </button>
-
-                            </div>
-
+                <!-- KEY METRICS & RESUME DOWNLOAD -->
+                <div class="candidate-info">
+                    <div class="info-box">
+                        <div class="info-top">
+                            <h3>Total Experience</h3>
+                            <span class="info-icon">💼</span>
                         </div>
-
-                        <div class="match-result"></div>
-
-                        <form class="updateStatusForm" data-applicant-id="<%= applicant._id %>">
-
-                            <div class="status-header">
-                                <h2>Update Application Status</h2>
-                                <p>Manage and track candidate progress</p>
-                            </div>
-
-                            <div class="status-group">
-
-                                <select name="status" class="status" required>
-                                    <option value="">Change Status</option>
-                                    <option value="pending">Pending</option>
-                                    <option value="accepted">Accepted</option>
-                                    <option value="rejected">Rejected</option>
-                                    <option value="shortlisted">Shortlisted</option>
-                                </select>
-
-                                <button type="submit" class="status-btn">
-                                    Update Status
-                                </button>
-
-                            </div>
-
-                        </form>
-
+                        <p class="info-value"><%= candUser ? candUser.experience : 0 %> Years</p>
                     </div>
 
+                    <div class="info-box">
+                        <div class="info-top">
+                            <h3>Candidate Resume</h3>
+                            <span class="info-icon">📄</span>
+                        </div>
+                        <% if (userResume) { %>
+                            <a href="<%= userResume %>" target="_blank" download class="resume-btn">
+                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
+                                <span>Download PDF Resume</span>
+                            </a>
+                        <% } else { %>
+                            <span class="no-resume-badge">No resume uploaded</span>
+                        <% } %>
+                    </div>
+
+                    <div class="ai-box">
+                        <div class="info-top">
+                            <h3>AI Resume Matcher</h3>
+                            <span class="info-icon">🤖</span>
+                        </div>
+                        <button class="match-btn" data-application-id="<%= applicant._id %>" type="button">
+                            <span>Analyze Match Score</span>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- AI RESULT CONTAINER (Used by matchResume.js) -->
+                <div class="match-result"></div>
+
+                <div class="section-divider"></div>
+
+                <!-- STATUS MANAGEMENT FORM (Used by updateStatus.js) -->
+                <form class="updateStatusForm" data-applicant-id="<%= applicant._id %>">
+                    <div class="status-header">
+                        <h2>Update Application Status</h2>
+                        <p>Change candidate progression in your hiring pipeline. Candidate is notified upon update.</p>
+                    </div>
+
+                    <div class="status-group">
+                        <select name="status" class="status" required>
+                            <option value="">Change Status...</option>
+                            <option value="pending" <%= applicant.status === "pending" ? "selected" : "" %>>Pending Review</option>
+                            <option value="shortlisted" <%= applicant.status === "shortlisted" ? "selected" : "" %>>Shortlist for Interview</option>
+                            <option value="accepted" <%= applicant.status === "accepted" ? "selected" : "" %>>Accept & Extend Offer</option>
+                            <option value="rejected" <%= applicant.status === "rejected" ? "selected" : "" %>>Reject Application</option>
+                        </select>
+
+                        <button type="submit" class="status-btn">
+                            <span>Update Status</span>
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"></polyline></svg>
+                        </button>
+                    </div>
+                </form>
+            </div>
         </div>
+    </div>
 
-        <script src="/javascripts/matchResume.js"></script>
-        <script src="/javascripts/updateStatus.js"></script>
-
+    <script src="/javascripts/matchResume.js"></script>
+    <script src="/javascripts/updateStatus.js"></script>
 </body>
 
 </html>

@@ -4,157 +4,183 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>My Applications</title>
-
-    <link rel="stylesheet" href="/stylesheets/myapplication.css">
+    <title>My Applications | NextHire</title>
     <link rel="stylesheet" href="/stylesheets/navbar.css">
+    <link rel="stylesheet" href="/stylesheets/myapplication.css">
 </head>
 
 <body>
-
     <%- include("partials/navbar") %>
 
-        <div class="container">
+    <div class="apps-page-wrapper">
+        <div class="apps-container">
+            <!-- PAGE HEADER -->
+            <div class="apps-header">
+                <div>
+                    <span class="apps-eyebrow">Career Pipeline</span>
+                    <h1 class="apps-title">Track Your <span class="gradient-text">Job Applications</span></h1>
+                    <p class="apps-subtitle">Monitor application stages, interview progress, and recruiter updates in real-time.</p>
+                </div>
+                <a href="/jobs/alljobs" class="btn-browse-new">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
+                    <span>Explore More Jobs</span>
+                </a>
+            </div>
 
-            <!-- Title -->
-            <h1>My <span style="color:#6d28d9;">Applications</span></h1>
-
-            <!-- Message -->
-            <% if (typeof message !=='undefined' ) { %>
-                <p class="message">
+            <% if (typeof message !== 'undefined') { %>
+                <div class="alert-box error">
                     <%= message %>
-                </p>
-                <% } %>
-                    <form method="get" action="/applications/my" class="filters">
+                </div>
+            <% } %>
 
-                        <input type="hidden" name="page" value="1">
+            <!-- FILTERS BAR -->
+            <div class="filter-toolbar-card">
+                <form method="get" action="/applications/my" class="filters">
+                    <input type="hidden" name="page" value="1">
 
-                        <input type="text" name="search" placeholder="Search jobs..." value="<%= search || '' %>">
+                    <div class="filter-inputs">
+                        <div class="filter-input-wrap search-wrap">
+                            <svg class="search-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+                            <input type="text" name="search" placeholder="Search by job title or company..." value="<%= search || '' %>">
+                        </div>
 
-                        <select name="sort">
-                            <option value="latest" <%=sort==="latest" ?"selected":"" %>>Latest</option>
-                            <option value="oldest" <%=sort==="oldest" ?"selected":"" %>>Oldest</option>
-                        </select>
+                        <div class="filter-input-wrap">
+                            <select name="status">
+                                <option value="all">All Application Statuses</option>
+                                <option value="pending" <%= status === "pending" ? "selected" : "" %>>Pending Review</option>
+                                <option value="shortlisted" <%= status === "shortlisted" ? "selected" : "" %>>Shortlisted</option>
+                                <option value="accepted" <%= status === "accepted" ? "selected" : "" %>>Accepted</option>
+                                <option value="rejected" <%= status === "rejected" ? "selected" : "" %>>Rejected</option>
+                                <option value="closed" <%= status === "closed" ? "selected" : "" %>>Job Closed</option>
+                                <option value="withdrawn" <%= status === "withdrawn" ? "selected" : "" %>>Withdrawn</option>
+                            </select>
+                        </div>
 
-                        <select name="status">
-                            <option value="all">All</option>
-                            <option value="pending" <%=status==="pending" ?"selected":"" %>>Pending</option>
-                            <option value="accepted" <%=status==="accepted" ?"selected":"" %>>Accepted</option>
-                            <option value="rejected" <%=status==="rejected" ?"selected":"" %>>Rejected</option>
-                            <option value="shortlisted" <%=status==="shortlisted" ?"selected":"" %>>Shortlisted</option>
-                            <option value="closed" <%=status==="closed" ?"selected":"" %>>Closed</option>
-                            <option value="withdrawn" <%=status==="withdrawn" ?"selected":"" %>>Withdrawn</option>
-                        </select>
+                        <div class="filter-input-wrap">
+                            <select name="sort">
+                                <option value="latest" <%= sort === "latest" ? "selected" : "" %>>Applied: Newest First</option>
+                                <option value="oldest" <%= sort === "oldest" ? "selected" : "" %>>Applied: Oldest First</option>
+                            </select>
+                        </div>
 
-                        <button type="submit">Apply</button>
-                        <a href="/applications/my" class="clear-btn">Clear</a>
-                    </form>
+                        <div class="filter-btns">
+                            <button type="submit" class="btn-filter-apply">Filter</button>
+                            <a href="/applications/my" class="clear-btn">Reset</a>
+                        </div>
+                    </div>
+                </form>
+            </div>
 
-                    <!-- Empty State -->
-                    <% if (applications.length===0) { %>
-                        <p class="empty">
-                            No applications yet 🚀 <br>
-                            <a href="/jobs/alljobs">Explore Jobs</a>
-                        </p>
-                        <% } else { %>
-
-
-
-
-                            <div class="applications-grid">
-
-                                <% applications.forEach(application=> { %>
-
-                                    <!-- Card -->
-                                    <div class="application-card <%= application.job ? '' : 'closed' %>">
-
-                                        <% if (application.job) { %>
-
-                                            <!-- Job Available -->
-                                            <h2>
-                                                <%= application.job.title %>
-                                            </h2>
-
-                                            <p><strong>Company:</strong>
-                                                <%= application.job.company || "N/A" %>
-                                            </p>
-                                            <p><strong>Location:</strong>
-                                                <%= application.job.location || "N/A" %>
-                                            </p>
-                                            <p><strong>Salary:</strong> ₹<%= application.job.salary || "Not disclosed"
-                                                    %>
-                                            </p>
-                                            <p><Strong>Resume :</Strong>
-                                                <%if(application.resumeUrl){%>
-                                                    <span>Uploaded</span>
-
-                                                    <%}else{%>
-                                                        <span>Not Uploaded</span>
-                                                        <%}%>
-                                            </p>
-                                            <p><strong>Applied At:</strong>
-                                                <%= new Date(application.createdAt).toLocaleDateString()%>
-                                            </p>
-
-                                            <a href="/jobs/<%=application.job._id%>">View job</a>
-
-                                            <!-- Status Badge -->
-                                            <p class="status <%= application.status %>">
-                                                <%= application.status %>
-                                            </p>
-
-                                            <% } else { %>
-
-                                                <!-- Job Deleted -->
-                                                <h2>⚠️ Job Closed</h2>
-                                                <p>This position is no longer available</p>
-
-                                                <p class="status closed">
-                                                    <%= application.status %>
-                                                </p>
-
-                                                <% } %>
-                                                    <button class="delete-btn" data-id="<%= application._id %>">
-                                                        Withdraw
-                                                    </button>
+            <!-- APPLICATIONS LIST -->
+            <% if (!applications || applications.length === 0) { %>
+                <div class="empty-applications-card">
+                    <div class="empty-icon-box">🚀</div>
+                    <h2>No Applications Found</h2>
+                    <p>You haven't submitted any applications matching this filter yet. Ready to launch your next career opportunity?</p>
+                    <a href="/jobs/alljobs" class="btn-start-applying">Discover Jobs Now</a>
+                </div>
+            <% } else { %>
+                <div class="applications-grid">
+                    <% applications.forEach(application => { %>
+                        <div class="application-card <%= application.job ? '' : 'closed' %>">
+                            <div class="app-card-top">
+                                <div class="app-company-info">
+                                    <div class="company-badge-sm">
+                                        <%= application.job && application.job.company ? application.job.company.charAt(0).toUpperCase() : '💼' %>
                                     </div>
+                                    <div>
+                                        <% if (application.job) { %>
+                                            <div class="app-company-name"><%= application.job.company || "N/A" %></div>
+                                            <h2 class="app-job-title">
+                                                <a href="/jobs/<%= application.job._id %>"><%= application.job.title %></a>
+                                            </h2>
+                                        <% } else { %>
+                                            <div class="app-company-name">Position Closed</div>
+                                            <h2 class="app-job-title">Role No Longer Available</h2>
+                                        <% } %>
+                                    </div>
+                                </div>
 
-                                    <% }) %>
-
+                                <!-- Status Badge (Crucial for withdrawal script) -->
+                                <p class="status <%= application.status %>">
+                                    <%= application.status %>
+                                </p>
                             </div>
 
+                            <% if (application.job) { %>
+                                <div class="app-meta-details">
+                                    <span class="meta-tag">
+                                        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg>
+                                        <%= application.job.location || "N/A" %>
+                                    </span>
+                                    <span class="meta-tag">
+                                        ₹<%= application.job.salary ? Number(application.job.salary).toLocaleString('en-IN') : 'Not disclosed' %>
+                                    </span>
+                                    <span class="meta-tag">
+                                        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline></svg>
+                                        <%= application.resumeUrl ? "Resume Attached" : "No Resume" %>
+                                    </span>
+                                    <span class="meta-tag date-tag">
+                                        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg>
+                                        Applied <%= new Date(application.createdAt).toLocaleDateString() %>
+                                    </span>
+                                </div>
+                            <% } else { %>
+                                <p class="closed-notice">This employer has removed or closed this position.</p>
                             <% } %>
 
-        </div>
-        <div class="pagination">
+                            <div class="app-card-actions">
+                                <% if (application.job) { %>
+                                    <a href="/jobs/<%= application.job._id %>" class="btn-view-job">View Job</a>
+                                <% } %>
 
-            <% if (page> 1) { %>
-                <a class="page-btn"
-                    href="?page=<%= page-1 %>&sort=<%= sort %>&status=<%= status %>&search=<%= search %>">
-                    ←
-                </a>
-                <% } else { %>
-                    <span class="page-btn disabled">←</span>
+                                <% if (application.status === 'pending') { %>
+                                    <button class="delete-btn" data-id="<%= application._id %>" title="Withdraw Application">
+                                        Withdraw Application
+                                    </button>
+                                <% } else { %>
+                                    <span class="status-locked-text">
+                                        <%= application.status === 'withdrawn' ? 'Application Withdrawn' : 'In Review' %>
+                                    </span>
+                                <% } %>
+                            </div>
+                        </div>
+                    <% }) %>
+                </div>
+            <% } %>
+
+            <!-- PAGINATION -->
+            <% if (pages > 1) { %>
+                <div class="pagination">
+                    <% if (page > 1) { %>
+                        <a class="page-btn" href="?page=<%= page - 1 %>&sort=<%= sort %>&status=<%= status %>&search=<%= search %>">
+                            ← Previous
+                        </a>
+                    <% } else { %>
+                        <span class="page-btn disabled">← Previous</span>
                     <% } %>
 
-                        <% for(let i=1; i <=pages; i++) { %>
-                            <a href="?page=<%= i %>&sort=<%= sort %>&status=<%= status %>&search=<%= search %>"
-                                class="page-btn <%= i === page ? 'active' : '' %>">
+                    <div class="page-numbers">
+                        <% for (let i = 1; i <= pages; i++) { %>
+                            <a href="?page=<%= i %>&sort=<%= sort %>&status=<%= status %>&search=<%= search %>" class="page-btn <%= i === page ? 'active' : '' %>">
                                 <%= i %>
                             </a>
-                            <% } %>
+                        <% } %>
+                    </div>
 
-                                <% if (page < pages) { %>
-                                    <a class="page-btn"
-                                        href="?page=<%= page+1 %>&sort=<%= sort %>&status=<%= status %>&search=<%= search %>">
-                                        →
-                                    </a>
-                                    <% } else { %>
-                                        <span class="page-btn disabled">→</span>
-                                        <% } %>
-
+                    <% if (page < pages) { %>
+                        <a class="page-btn" href="?page=<%= page + 1 %>&sort=<%= sort %>&status=<%= status %>&search=<%= search %>">
+                            Next →
+                        </a>
+                    <% } else { %>
+                        <span class="page-btn disabled">Next →</span>
+                    <% } %>
+                </div>
+            <% } %>
         </div>
-        <script src="/javascripts/withdrawalApplication.js"></script>
+    </div>
+
+    <script src="/javascripts/withdrawalApplication.js"></script>
 </body>
 
 </html>

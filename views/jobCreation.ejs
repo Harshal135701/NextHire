@@ -4,85 +4,157 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Create Job Post</title>
-
+    <title>Post a New Job | NextHire</title>
     <link rel="stylesheet" href="/stylesheets/navbar.css">
     <link rel="stylesheet" href="/stylesheets/createJob.css">
-
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap"
-        rel="stylesheet">
 </head>
 
 <body>
-
     <%- include("partials/navbar") %>
 
-        <div class="form-container">
+    <div class="create-page-wrapper">
+        <div class="create-container">
+            <!-- BREADCRUMB -->
+            <a href="/recruiter/dashboard" class="back-link">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="15 18 9 12 15 6"></polyline></svg>
+                <span>Back to Dashboard</span>
+            </a>
 
-            <div class="form-header">
-                <h2>Create a Job Post</h2>
-                <p>Publish jobs faster with AI-powered descriptions.</p>
-            </div>
-
-            <form action="/recruiter/create" method="POST">
-
-                <label>Title</label>
-                <input type="text" name="title" id="title" required>
-
-                <label>Company</label>
-                <input type="text" name="company" id="company" required>
-
-                <label>Location</label>
-                <input type="text" name="location" id="location" required>
-
-                <label>Salary</label>
-                <input type="number" name="salary" id="salary" required>
-
-                <label>Experience Level (Years)</label>
-                <input type="number" name="experienceLevel" id="experienceLevel" required>
-
-                <label>Job Type</label>
-                <select name="jobType" id="jobType" required>
-                    <option value="">Select Job Type</option>
-                    <option value="Full-time">Full-time</option>
-                    <option value="Part-time">Part-time</option>
-                    <option value="Internship">Internship</option>
-                    <option value="Remote">Remote</option>
-                </select>
-
-                <label>Category</label>
-
-                <select name="category" id="category" required>
-                    <option value="">Select Category</option>
-                    <option value="Frontend">Frontend</option>
-                    <option value="Backend">Backend</option>
-                    <option value="Full Stack">Full Stack</option>
-                    <option value="Cloud">Cloud</option>
-                    <option value="DevOps">DevOps</option>
-                    <option value="Data Science">Data Science</option>
-                </select>
-
-                <div class="description-header">
-                    <label>Job Description</label>
-
-                    <button type="button" id="generateBtn">
-                        ✨ Generate AI Description
-                    </button>
+            <!-- FORM CARD -->
+            <div class="form-card">
+                <div class="form-header">
+                    <span class="badge-new-post">Recruiter Portal</span>
+                    <h1 class="form-main-title">Publish a New <span class="gradient-text">Job Opening</span></h1>
+                    <p class="form-subtitle">Fill in the role details or use our integrated Gemini AI assistant to generate a comprehensive job description.</p>
                 </div>
 
-                <textarea name="description" rows="8" id="description"
-                    placeholder="AI-generated job description will appear here..." required></textarea>
+                <% if (typeof message !== "undefined") { %>
+                    <div class="alert-box error">
+                        <%= message %>
+                    </div>
+                <% } %>
 
-                <button type="submit" class="submit-btn">
-                    Create Job
-                </button>
+                <form action="/recruiter/create" method="POST" class="job-creation-form">
+                    <!-- SECTION 1: ROLE BASICS -->
+                    <div class="form-section">
+                        <div class="section-title-wrap">
+                            <span class="step-num">1</span>
+                            <div>
+                                <h3>Basic Role Information</h3>
+                                <p>Specify the title, hiring company, and work location.</p>
+                            </div>
+                        </div>
 
-            </form>
+                        <div class="fields-grid-2">
+                            <div class="form-group">
+                                <label for="title">Job Title <span class="required">*</span></label>
+                                <input type="text" name="title" id="title" placeholder="e.g. Senior Full Stack Engineer" required autocomplete="off">
+                            </div>
+
+                            <div class="form-group">
+                                <label for="company">Company Name <span class="required">*</span></label>
+                                <input type="text" name="company" id="company" placeholder="e.g. Google, Acme Labs" required autocomplete="off">
+                            </div>
+                        </div>
+
+                        <div class="fields-grid-2">
+                            <div class="form-group">
+                                <label for="location">Location / Work Mode <span class="required">*</span></label>
+                                <input type="text" name="location" id="location" placeholder="e.g. Bangalore, Mumbai, or Remote" required autocomplete="off">
+                            </div>
+
+                            <div class="form-group">
+                                <label for="category">Category / Specialization <span class="required">*</span></label>
+                                <select name="category" id="category" required>
+                                    <option value="">Select Category</option>
+                                    <option value="Frontend">Frontend Development</option>
+                                    <option value="Backend">Backend Engineering</option>
+                                    <option value="Full Stack">Full Stack Development</option>
+                                    <option value="Cloud">Cloud & DevOps</option>
+                                    <option value="DevOps">DevOps Engineering</option>
+                                    <option value="Data Science">Data Science & AI</option>
+                                    <option value="Mobile">Mobile App Development</option>
+                                    <option value="Design">UI / UX Design</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- SECTION 2: COMPENSATION & REQUIREMENTS -->
+                    <div class="form-section">
+                        <div class="section-title-wrap">
+                            <span class="step-num">2</span>
+                            <div>
+                                <h3>Compensation & Employment Criteria</h3>
+                                <p>Set realistic expectations for compensation and minimum experience.</p>
+                            </div>
+                        </div>
+
+                        <div class="fields-grid-3">
+                            <div class="form-group">
+                                <label for="salary">Annual Salary (₹) <span class="required">*</span></label>
+                                <input type="number" name="salary" id="salary" placeholder="e.g. 1500000" min="0" required>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="experienceLevel">Experience Level (Years) <span class="required">*</span></label>
+                                <input type="number" name="experienceLevel" id="experienceLevel" placeholder="e.g. 3" min="0" required>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="jobType">Employment Type <span class="required">*</span></label>
+                                <select name="jobType" id="jobType" required>
+                                    <option value="">Select Job Type</option>
+                                    <option value="Full-time">Full-time</option>
+                                    <option value="Part-time">Part-time</option>
+                                    <option value="Internship">Internship</option>
+                                    <option value="Remote">Remote</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- SECTION 3: DESCRIPTION & AI GENERATOR -->
+                    <div class="form-section">
+                        <div class="section-title-wrap">
+                            <span class="step-num">3</span>
+                            <div class="desc-header-row">
+                                <div>
+                                    <h3>Job Description</h3>
+                                    <p>Detail role expectations, requirements, and benefits.</p>
+                                </div>
+                                <button type="button" id="generateBtn" class="btn-ai-generate">
+                                    <span class="sparkle-icon">✨</span>
+                                    <span>Generate with AI</span>
+                                </button>
+                            </div>
+                        </div>
+
+                        <div class="form-group full-width">
+                            <textarea
+                                name="description"
+                                id="description"
+                                rows="8"
+                                placeholder="Write or generate a comprehensive job description outlining key responsibilities, tech stack, and ideal candidate background..."
+                                required
+                            ></textarea>
+                            <span class="field-help-text">Click "Generate with AI" after filling in title, company, and experience to automatically produce an optimized job posting.</span>
+                        </div>
+                    </div>
+
+                    <div class="form-submit-row">
+                        <a href="/recruiter/dashboard" class="btn-cancel">Discard</a>
+                        <button type="submit" class="submit-btn">
+                            <span>Publish Job Post</span>
+                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"></polyline></svg>
+                        </button>
+                    </div>
+                </form>
+            </div>
         </div>
+    </div>
 
-        <script src="/javascripts/jobCreationAiDescription.js"></script>
-
+    <script src="/javascripts/jobCreationAiDescription.js"></script>
 </body>
 
 </html>

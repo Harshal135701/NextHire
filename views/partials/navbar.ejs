@@ -1,75 +1,161 @@
 <nav class="navbar">
-    <div class="logo">Next<span>Hire</span></div>
+    <div class="nav-container">
+        <div class="nav-left">
+            <a href="<%= user.role === 'recruiter' ? '/recruiter/dashboard' : '/home' %>" class="logo-link">
+                <div class="logo">
+                    <span class="logo-icon">
+                        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                            <rect width="20" height="14" x="2" y="7" rx="3"></rect>
+                            <path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"></path>
+                        </svg>
+                    </span>
+                    Next<span>Hire</span>
+                </div>
+            </a>
+            <span class="role-badge <%= user.role %>">
+                <%= user.role === 'recruiter' ? 'Recruiter' : 'Candidate' %>
+            </span>
+        </div>
 
-    <div class="nav-right">
-        <div class="nav-links">
-
-
-            <% if (user.role==='recruiter' ) { %>
-                <a href="/recruiter/dashboard">Home</a>
-                <a href="/recruiter/create">Create Job</a>
-                <a href="/recruiter/myjobs">Published Jobs</a>
+        <div class="nav-right">
+            <div class="nav-links">
+                <% if (user.role==='recruiter' ) { %>
+                    <a href="/recruiter/dashboard" class="nav-item">Dashboard</a>
+                    <a href="/recruiter/create" class="nav-item">Create Job</a>
+                    <a href="/recruiter/myjobs" class="nav-item">Published Jobs</a>
                 <% } else { %>
-                    <a href="/home">Home</a>
-                    <a href="/jobs/alljobs">Jobs</a>
-                    <a href="/applications/my">Applications</a>
-                    <a href="/jobs/saved">Saved Jobs</a>
+                    <a href="/home" class="nav-item">Home</a>
+                    <a href="/jobs/alljobs" class="nav-item">Find Jobs</a>
+                    <a href="/applications/my" class="nav-item">Applications</a>
+                    <a href="/jobs/saved" class="nav-item">Saved Jobs</a>
                     <div class="ai-menu">
-
-                        <button class="ai-btn">
-                            AI Mode ▼
+                        <button class="ai-btn" type="button">
+                            <span class="ai-sparkle">✨</span>
+                            <span>AI Tools</span>
+                            <svg class="chevron-down" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"></polyline></svg>
                         </button>
-
                         <div class="ai-dropdown">
-                            <a href="/ai/preparation">
-                                Interview Preparation
+                            <a href="/ai/preparation" class="ai-dropdown-item">
+                                <span class="ai-item-icon">📚</span>
+                                <div class="ai-item-text">
+                                    <span class="ai-item-title">Interview Preparation</span>
+                                    <span class="ai-item-desc">Targeted Q&A for your roles</span>
+                                </div>
                             </a>
-
-                            <a href="/ai/mockInterview">
-                                Mock Interview
+                            <a href="/ai/mockInterview" class="ai-dropdown-item">
+                                <span class="ai-item-icon">🎙️</span>
+                                <div class="ai-item-text">
+                                    <span class="ai-item-title">AI Mock Interview</span>
+                                    <span class="ai-item-desc">Live role-based simulation</span>
+                                </div>
                             </a>
                         </div>
-
                     </div>
-                    <% } %>
-        </div>
-
-
-        <div class="user-section">
-
-            <div class="notification-container">
-
-                <div id="notificationBell" class="notification-bell">
-                    🔔
-                    <span id="notificationCount">
-                        0
-                    </span>
-                </div>
-                <div id="notificationDropdown" class="notification-dropdown">
-
-                    <div class="notification-header">
-                        Notifications
-                    </div>
-
-                    <div id="notificationList">
-
-                    </div>
-
-                </div>
-
+                <% } %>
             </div>
 
-            <img src="<%= user.profilepic %>" alt="Profile" class="profile-pic">
+            <div class="user-section">
+                <div class="notification-container">
+                    <div id="notificationBell" class="notification-bell" title="Notifications" role="button" tabindex="0">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9"></path>
+                            <path d="M10.3 21a1.94 1.94 0 0 0 3.4 0"></path>
+                        </svg>
+                        <span id="notificationCount">0</span>
+                    </div>
 
-            <div class="dropdown-menu" id="dropdownMenu">
-                <a href="/profile">Edit Profile</a>
-                <a href="/logout">Logout</a>
+                    <div id="notificationDropdown" class="notification-dropdown">
+                        <div class="notification-header">
+                            <div class="notification-header-title">
+                                <span>Notifications</span>
+                            </div>
+                        </div>
+                        <div id="notificationList">
+                            <!-- Populated dynamically by navbar.js -->
+                        </div>
+                    </div>
+                </div>
+
+                <div class="profile-container">
+                    <img src="<%= user.profilepic %>" alt="<%= user.fullname %>" class="profile-pic" title="Account Menu">
+                    <div class="dropdown-menu" id="dropdownMenu">
+                        <div class="dropdown-user-info">
+                            <div class="dropdown-user-name"><%= user.fullname %></div>
+                            <div class="dropdown-user-role"><%= user.occupation || (user.role === 'recruiter' ? 'Talent Recruiter' : 'Candidate') %></div>
+                        </div>
+                        <div class="dropdown-divider"></div>
+                        <a href="/profile" class="dropdown-item">
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
+                            Edit Profile
+                        </a>
+                        <% if (user.role === 'candidate') { %>
+                            <a href="/applications/my" class="dropdown-item">
+                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline></svg>
+                                My Applications
+                            </a>
+                            <a href="/jobs/saved" class="dropdown-item">
+                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m19 21-7-4-7 4V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2v16z"></path></svg>
+                                Saved Jobs
+                            </a>
+                        <% } else { %>
+                            <a href="/recruiter/myjobs" class="dropdown-item">
+                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect width="20" height="14" x="2" y="7" rx="3"></rect><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"></path></svg>
+                                Manage Jobs
+                            </a>
+                        <% } %>
+                        <div class="dropdown-divider"></div>
+                        <a href="/logout" class="dropdown-item logout">
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path><polyline points="16 17 21 12 16 7"></polyline><line x1="21" y1="12" x2="9" y2="12"></line></svg>
+                            Sign Out
+                        </a>
+                    </div>
+                </div>
+
+                <!-- Mobile Hamburger Toggle -->
+                <button class="hamburger-btn" id="hamburgerBtn" aria-label="Toggle navigation" type="button">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </button>
             </div>
-
         </div>
+    </div>
 
+    <!-- Mobile Navigation Drawer -->
+    <div class="mobile-nav-drawer" id="mobileNavDrawer">
+        <div class="mobile-drawer-header">
+            <div class="logo">Next<span>Hire</span></div>
+            <button class="mobile-drawer-close" id="mobileNavClose" type="button">&times;</button>
+        </div>
+        <div class="mobile-user-card">
+            <img src="<%= user.profilepic %>" alt="<%= user.fullname %>" class="mobile-avatar">
+            <div>
+                <div class="mobile-user-name"><%= user.fullname %></div>
+                <div class="mobile-user-role"><%= user.role === 'recruiter' ? 'Recruiter' : 'Job Seeker' %></div>
+            </div>
+        </div>
+        <div class="mobile-nav-links">
+            <% if (user.role === 'recruiter') { %>
+                <a href="/recruiter/dashboard" class="mobile-link">Dashboard</a>
+                <a href="/recruiter/create" class="mobile-link">Create Job</a>
+                <a href="/recruiter/myjobs" class="mobile-link">Published Jobs</a>
+            <% } else { %>
+                <a href="/home" class="mobile-link">Home</a>
+                <a href="/jobs/alljobs" class="mobile-link">Find Jobs</a>
+                <a href="/applications/my" class="mobile-link">Applications</a>
+                <a href="/jobs/saved" class="mobile-link">Saved Jobs</a>
+                <div class="mobile-section-divider"></div>
+                <div class="mobile-section-title">AI Career Tools</div>
+                <a href="/ai/preparation" class="mobile-link">Interview Preparation</a>
+                <a href="/ai/mockInterview" class="mobile-link">Mock Interview</a>
+            <% } %>
+            <div class="mobile-section-divider"></div>
+            <a href="/profile" class="mobile-link">Edit Profile</a>
+            <a href="/logout" class="mobile-link logout">Sign Out</a>
+        </div>
     </div>
 </nav>
+
 <script>
     window.currentUserId = "<%= user._id %>";
     window.currentUserRole = "<%= user.role %>";

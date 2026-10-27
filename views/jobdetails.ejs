@@ -4,58 +4,204 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Job Details - NextHire</title>
-
-    <link rel="stylesheet" href="/stylesheets/jobdetails.css">
+    <title><%= jobpost.title %> at <%= jobpost.company %> | NextHire</title>
     <link rel="stylesheet" href="/stylesheets/navbar.css">
+    <link rel="stylesheet" href="/stylesheets/jobdetails.css">
 </head>
 
 <body>
-
     <%- include("partials/navbar") %>
 
-    <div class="details-container">
-
-        <a href="/jobs/alljobs" class="back-link">← Back to Jobs</a>
-
-        <div class="job-card">
-
-            <h1><%= jobpost.title %></h1>
-
-            <div class="job-meta">
-                <span class="meta-item"><%= jobpost.company %></span>
-                <span class="meta-item"><%= jobpost.location %></span>
-            </div>
-
-            <div class="salary-box">
-                Salary: ₹<%= jobpost.salary %>
-            </div>
-
-            <div class="description-box">
-                <p>
-                    <strong>Description:</strong><br>
-                    <%= jobpost.description %>
-                </p>
-            </div>
-
-            <div class="recruiter-box">
-                <h3>Recruiter Information</h3>
-
-                <p><strong>Name:</strong> <%= recruiter.fullname %></p>
-                <p><strong>Occupation:</strong> <%= recruiter.occupation %></p>
-
-                <a class="chat-link" href="/recruiter/chat/<%= jobpost._id %>/<%= recruiter._id %>">
-                    💬 Chat With Recruiter
+    <div class="details-page-wrapper">
+        <div class="details-container">
+            <!-- BREADCRUMB -->
+            <nav class="breadcrumb-nav">
+                <a href="/jobs/alljobs" class="back-link">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="15 18 9 12 15 6"></polyline></svg>
+                    <span>Back to all jobs</span>
                 </a>
+                <span class="crumb-separator">/</span>
+                <span class="crumb-current"><%= jobpost.title %></span>
+            </nav>
+
+            <div class="job-layout-grid">
+                <!-- MAIN CONTENT (LEFT) -->
+                <main class="job-main-column">
+                    <!-- HERO CARD -->
+                    <div class="job-hero-card">
+                        <div class="hero-top-row">
+                            <div class="company-badge-large">
+                                <%= jobpost.company ? jobpost.company.charAt(0).toUpperCase() : 'C' %>
+                            </div>
+                            <div class="hero-header-text">
+                                <div class="company-subtitle">
+                                    <span class="company-name"><%= jobpost.company %></span>
+                                    <span class="verified-tag">✓ Verified Employer</span>
+                                </div>
+                                <h1 class="job-main-title"><%= jobpost.title %></h1>
+                                <div class="job-meta-chips">
+                                    <span class="meta-chip">
+                                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg>
+                                        <%= jobpost.location %>
+                                    </span>
+                                    <span class="meta-chip">
+                                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="7" width="20" height="14" rx="2" ry="2"></rect><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"></path></svg>
+                                        <%= jobpost.category %>
+                                    </span>
+                                    <span class="meta-chip">
+                                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 14 14"></polyline></svg>
+                                        <%= jobpost.experienceLevel %>+ Years Experience
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- QUICK HIGHLIGHTS GRID -->
+                        <div class="quick-highlights">
+                            <div class="highlight-item">
+                                <span class="highlight-label">Annual Salary</span>
+                                <span class="highlight-val salary">₹<%= Number(jobpost.salary).toLocaleString('en-IN') %></span>
+                            </div>
+                            <div class="highlight-item">
+                                <span class="highlight-label">Job Type</span>
+                                <span class="highlight-val"><%= jobpost.jobType %></span>
+                            </div>
+                            <div class="highlight-item">
+                                <span class="highlight-label">Experience</span>
+                                <span class="highlight-val"><%= jobpost.experienceLevel %>+ Years</span>
+                            </div>
+                            <div class="highlight-item">
+                                <span class="highlight-label">Location</span>
+                                <span class="highlight-val"><%= jobpost.location %></span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- JOB DESCRIPTION CARD -->
+                    <div class="job-content-card">
+                        <h2 class="content-heading">About This Role</h2>
+                        <div class="description-body">
+                            <% const paragraphs = jobpost.description.split('\n'); %>
+                            <% paragraphs.forEach(p => { %>
+                                <% if (p.trim().length > 0) { %>
+                                    <p><%= p %></p>
+                                <% } %>
+                            <% }) %>
+                        </div>
+
+                        <div class="responsibilities-block">
+                            <h3>Key Highlights & Requirements</h3>
+                            <ul class="checklist">
+                                <li>Proven hands-on experience in <strong><%= jobpost.category %></strong> or related domain.</li>
+                                <li>Solid problem-solving ability, clean coding practices, and system architecture fundamentals.</li>
+                                <li>Ability to collaborate cross-functionally with engineering, product, and design teams.</li>
+                                <li>Strong communication skills and enthusiasm for fast-paced development environments.</li>
+                            </ul>
+                        </div>
+
+                        <div class="perks-block">
+                            <h3>Benefits & Offerings</h3>
+                            <div class="perks-grid">
+                                <div class="perk-item">
+                                    <span class="perk-icon">🏥</span>
+                                    <span>Comprehensive Health Coverage</span>
+                                </div>
+                                <div class="perk-item">
+                                    <span class="perk-icon">💻</span>
+                                    <span>Modern Work Equipment & Allowance</span>
+                                </div>
+                                <div class="perk-item">
+                                    <span class="perk-icon">🏖️</span>
+                                    <span>Flexible Time Off & Wellness Days</span>
+                                </div>
+                                <div class="perk-item">
+                                    <span class="perk-icon">📈</span>
+                                    <span>Annual Bonus & Performance Incentives</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </main>
+
+                <!-- SIDEBAR COLUMN (RIGHT) -->
+                <aside class="job-sidebar-column">
+                    <!-- APPLY ACTION CARD -->
+                    <div class="sidebar-card apply-cta-card">
+                        <div class="salary-display">
+                            <span class="salary-num">₹<%= Number(jobpost.salary).toLocaleString('en-IN') %></span>
+                            <span class="salary-sub">/ year compensation</span>
+                        </div>
+                        <p class="apply-subtext">Apply now with your resume. Applications are reviewed directly by the hiring manager.</p>
+                        <form action="/applications/apply/<%= jobpost._id %>" method="get">
+                            <button type="submit" class="primary-apply-btn">
+                                <span>Apply for this Job</span>
+                                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"></polyline></svg>
+                            </button>
+                        </form>
+                    </div>
+
+                    <!-- RECRUITER / HIRING MANAGER CARD -->
+                    <div class="sidebar-card recruiter-info-card">
+                        <div class="card-title-row">
+                            <span class="card-eyebrow">Hiring Team</span>
+                            <span class="status-online">Online</span>
+                        </div>
+
+                        <div class="recruiter-profile-row">
+                            <img src="<%= recruiter.profilepic || '/images/default.webp' %>" alt="<%= recruiter.fullname %>" class="recruiter-avatar">
+                            <div>
+                                <h3 class="recruiter-name"><%= recruiter.fullname %></h3>
+                                <p class="recruiter-role"><%= recruiter.occupation || 'Talent Acquisition Partner' %></p>
+                            </div>
+                        </div>
+
+                        <p class="chat-intro">Have questions regarding this role or requirements? Chat directly with the recruiter before applying.</p>
+
+                        <a href="/recruiter/chat/<%= jobpost._id %>/<%= recruiter._id %>" class="chat-recruiter-btn">
+                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path></svg>
+                            <span>Chat with Recruiter</span>
+                        </a>
+                    </div>
+
+                    <!-- JOB SUMMARY DETAILS -->
+                    <div class="sidebar-card job-summary-card">
+                        <h4>Job Overview</h4>
+                        <div class="summary-list">
+                            <div class="summary-item">
+                                <span class="summary-label">Company</span>
+                                <span class="summary-val"><%= jobpost.company %></span>
+                            </div>
+                            <div class="summary-item">
+                                <span class="summary-label">Employment Type</span>
+                                <span class="summary-val"><%= jobpost.jobType %></span>
+                            </div>
+                            <div class="summary-item">
+                                <span class="summary-label">Location</span>
+                                <span class="summary-val"><%= jobpost.location %></span>
+                            </div>
+                            <div class="summary-item">
+                                <span class="summary-label">Experience Required</span>
+                                <span class="summary-val"><%= jobpost.experienceLevel %>+ Years</span>
+                            </div>
+                            <div class="summary-item">
+                                <span class="summary-label">Category</span>
+                                <span class="summary-val"><%= jobpost.category %></span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- VERIFIED BADGE CARD -->
+                    <div class="sidebar-card safety-guarantee-card">
+                        <div class="safety-icon">🛡️</div>
+                        <div>
+                            <h5>NextHire Verified</h5>
+                            <p>This job listing has been screened and verified to ensure authenticity and fair hiring standards.</p>
+                        </div>
+                    </div>
+                </aside>
             </div>
-
-            <form action="/applications/apply/<%= jobpost._id %>" method="get">
-                <button class="apply-btn">Apply Now</button>
-            </form>
-
         </div>
     </div>
-
 </body>
 
 </html>

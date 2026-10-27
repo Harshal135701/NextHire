@@ -8,14 +8,11 @@ matchBtn.addEventListener("click", async () => {
     resultDiv.innerHTML = "Analyzing Resume...";
 
     try {
-        console.log(applicationId);
         const response = await fetch(`/ai/check-match/${applicationId}`, {
             method: "POST"
         });
 
         const data = await response.json();
-
-        console.log(data);
 
         if (data.success) {
 

@@ -4,47 +4,81 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Saved Jobs</title>
-    <link rel="stylesheet" href="/stylesheets/savedJobs.css">
+    <title>Saved Jobs | NextHire</title>
     <link rel="stylesheet" href="/stylesheets/navbar.css">
+    <link rel="stylesheet" href="/stylesheets/savedJobs.css">
 </head>
 
 <body>
-
     <%- include("partials/navbar") %>
 
-    <div class="page-wrapper">
-
-        <h2 class="saved-title">Saved Jobs</h2>
-
-        <% if (jobs.length === 0) { %>
-            <div class="empty-state">
-                <p>No saved jobs yet 🚀</p>
-            </div>
-        <% } else { %>
-
-        <div class="jobs-container">
-            <% jobs.forEach(job => { %>
-                <div class="job-card">
-
-                    <div class="job-info">
-                        <h3><%= job.title %></h3>
-                        <p class="company"><%= job.company %></p>
-                        <p class="location"><%= job.location %></p>
-                    </div>
-
-                    <div class="job-actions">
-                        <a href="/jobs/<%= job._id %>" class="view-btn">View Details</a>
-                        <button class="remove-btn" data-id="<%= job._id %>">Remove Bookmark</button>
-                    </div>
-
+    <div class="saved-page-wrapper">
+        <div class="saved-container">
+            <!-- HEADER -->
+            <div class="saved-header">
+                <div>
+                    <span class="saved-eyebrow">Bookmarks</span>
+                    <h1 class="saved-title">Saved <span class="gradient-text">Opportunities</span></h1>
+                    <p class="saved-subtitle">Keep track of job openings you're interested in and apply whenever you're ready.</p>
                 </div>
-            <% }) %>
+                <div class="saved-badge">
+                    <span><%= jobs ? jobs.length : 0 %> Saved</span>
+                </div>
+            </div>
+
+            <!-- JOBS CONTAINER -->
+            <% if (!jobs || jobs.length === 0) { %>
+                <div class="empty-state-card">
+                    <div class="empty-bookmark-icon">🔖</div>
+                    <h2>No Saved Jobs Yet</h2>
+                    <p>When you find roles you love while browsing, click "Save Job" to bookmark them here for later review.</p>
+                    <a href="/jobs/alljobs" class="btn-browse-jobs">Browse Available Jobs</a>
+                </div>
+            <% } else { %>
+                <div class="jobs-container">
+                    <% jobs.forEach(job => { %>
+                        <div class="job-card">
+                            <div class="card-header-row">
+                                <div class="company-logo-avatar">
+                                    <%= job.company ? job.company.charAt(0).toUpperCase() : 'C' %>
+                                </div>
+                                <div class="job-main-info">
+                                    <span class="company-label"><%= job.company %></span>
+                                    <h3 class="job-card-title">
+                                        <a href="/jobs/<%= job._id %>"><%= job.title %></a>
+                                    </h3>
+                                    <div class="job-meta-row">
+                                        <span class="meta-tag">
+                                            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg>
+                                            <%= job.location %>
+                                        </span>
+                                        <% if (job.jobType) { %>
+                                            <span class="meta-tag"><%= job.jobType %></span>
+                                        <% } %>
+                                        <% if (job.salary) { %>
+                                            <span class="meta-tag salary-tag">₹<%= Number(job.salary).toLocaleString('en-IN') %> / yr</span>
+                                        <% } %>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="job-actions">
+                                <a href="/jobs/<%= job._id %>" class="view-btn">
+                                    <span>View Details</span>
+                                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"></polyline></svg>
+                                </a>
+                                <button class="remove-btn" data-id="<%= job._id %>" title="Remove from Bookmarks" type="button">
+                                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path></svg>
+                                    <span>Remove</span>
+                                </button>
+                            </div>
+                        </div>
+                    <% }) %>
+                </div>
+            <% } %>
         </div>
-
-        <% } %>
-
     </div>
+
     <script src="/javascripts/getSavedPost.js"></script>
 </body>
 

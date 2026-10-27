@@ -4,67 +4,105 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Applicants</title>
+    <title>Applicant Review | NextHire</title>
     <link rel="stylesheet" href="/stylesheets/navbar.css">
     <link rel="stylesheet" href="/stylesheets/applicants.css">
 </head>
 
 <body>
     <%- include("partials/navbar") %>
-        <a href="/recruiter/myjobs">Back</a>
+
+    <div class="applicants-page-wrapper">
         <div class="applicants-container">
-            <h2>Applicants</h2>
+            <!-- BREADCRUMB -->
+            <a href="/recruiter/myjobs" class="back-link">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="15 18 9 12 15 6"></polyline></svg>
+                <span>Back to Published Jobs</span>
+            </a>
 
-            <!-- <% if (typeof message !=="undefined" ) { %>
-                <p class="message">
-                    <%= message %>
-                </p>
-                <% } %> -->
+            <!-- HEADER -->
+            <div class="applicants-header">
+                <div>
+                    <span class="header-eyebrow">Applicant Tracking</span>
+                    <h1 class="header-title">Candidate Pipeline</h1>
+                    <p class="header-subtitle">Review profiles, assess AI match compatibility, and communicate with applicants.</p>
+                </div>
 
-            <% if (applicants.length===0) { %>
-                <p class="message">No applicants found.</p>
-                <% } else { %>
-                    <div class="applicant-grid">
-                        <% applicants.forEach(function(applicant) { %>
-                            <div class="applicant-card">
-                                <h3>
-                                    <%= applicant.applicant.fullname %>
-                                </h3>
-                                <p><strong>Email:</strong>
-                                    <%= applicant.applicant.email %>
-                                </p>
-                                <p><strong>occupation:</strong>
-                                    <%= applicant.applicant.occupation %>
-                                </p>
-                                <p><strong>experience:</strong>
-                                    <%= applicant.applicant.experience %> Years
-                                </p>
-                                <p><strong>Status:</strong>
+                <div class="candidate-counter-badge">
+                    <span><%= applicants ? applicants.length : 0 %> Candidates Total</span>
+                </div>
+            </div>
+
+            <!-- APPLICANTS LIST / GRID -->
+            <% if (!applicants || applicants.length === 0) { %>
+                <div class="empty-state-card">
+                    <div class="empty-icon-wrap">👥</div>
+                    <h2>No Applicants Found</h2>
+                    <p>No candidates have submitted applications for this role yet. Your listing is actively indexed on the search page.</p>
+                    <a href="/recruiter/myjobs" class="btn-back-jobs">Return to Jobs</a>
+                </div>
+            <% } else { %>
+                <div class="applicant-grid">
+                    <% applicants.forEach(function(applicant) { %>
+                        <div class="applicant-card">
+                            <div class="card-top-row">
+                                <div class="candidate-info-group">
+                                    <div class="candidate-avatar">
+                                        <%= applicant.applicant.fullname ? applicant.applicant.fullname.charAt(0).toUpperCase() : 'C' %>
+                                    </div>
+                                    <div>
+                                        <h3 class="candidate-name"><%= applicant.applicant.fullname %></h3>
+                                        <p class="candidate-title"><%= applicant.applicant.occupation || "Candidate" %></p>
+                                    </div>
+                                </div>
+
+                                <span class="status-pill <%= applicant.status %>">
                                     <%= applicant.status %>
-                                </p>
+                                </span>
+                            </div>
 
-                                <p>
-                                    <strong>Match Percentage:</strong>
+                            <div class="candidate-details-grid">
+                                <div class="detail-cell">
+                                    <span class="cell-label">Email</span>
+                                    <span class="cell-val email"><%= applicant.applicant.email %></span>
+                                </div>
+                                <div class="detail-cell">
+                                    <span class="cell-label">Experience</span>
+                                    <span class="cell-val"><%= applicant.applicant.experience %> Years</span>
+                                </div>
+                            </div>
 
-                                    <% if(applicant.matchPercentage !==null) { %>
-                                        <%= applicant.matchPercentage %>%
-                                            <% } else { %>
-                                                Not Analyzed Yet
-                                                <% } %>
-                                </p>
-                                <a href="/recruiter/chat/candidate/<%= applicant.applicant._id %>/<%= job %>">
-                                    Message Candidate
+                            <!-- AI MATCH HIGHLIGHT -->
+                            <div class="match-score-row">
+                                <span class="match-label">AI Resume Compatibility:</span>
+                                <% if (applicant.matchPercentage !== null && applicant.matchPercentage !== undefined) { %>
+                                    <span class="match-pill <%= applicant.matchPercentage >= 75 ? 'high' : (applicant.matchPercentage >= 50 ? 'medium' : 'low') %>">
+                                        🤖 <%= applicant.matchPercentage %>% Fit
+                                    </span>
+                                <% } else { %>
+                                    <span class="match-pill unanalyzed">
+                                        Unanalyzed
+                                    </span>
+                                <% } %>
+                            </div>
+
+                            <div class="card-action-links">
+                                <a href="/recruiter/chat/candidate/<%= applicant.applicant._id %>/<%= job %>" class="btn-chat-candidate">
+                                    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path></svg>
+                                    <span>Message</span>
                                 </a>
-                                <br>
-                                <a href="/recruiter/jobs/<%= job %>/applicants/<%= applicant.applicant._id %>">
-                                    View Applicant
+
+                                <a href="/recruiter/jobs/<%= job %>/applicants/<%= applicant.applicant._id %>" class="btn-view-applicant">
+                                    <span>Review Dossier</span>
+                                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"></polyline></svg>
                                 </a>
                             </div>
-                            <% }) %>
-                    </div>
-                    <% } %>
+                        </div>
+                    <% }) %>
+                </div>
+            <% } %>
         </div>
-
+    </div>
 </body>
 
 </html>

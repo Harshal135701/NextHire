@@ -4,160 +4,128 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>My Jobs</title>
-
+    <title>Published Jobs | NextHire</title>
     <link rel="stylesheet" href="/stylesheets/navbar.css">
     <link rel="stylesheet" href="/stylesheets/myJobs.css">
 </head>
 
 <body>
-
     <%- include("partials/navbar") %>
 
-    <div class="jobs-container">
+    <div class="myjobs-page-wrapper">
+        <div class="myjobs-container">
+            <!-- PAGE HEADER -->
+            <div class="myjobs-header">
+                <div>
+                    <span class="myjobs-eyebrow">Recruitment Management</span>
+                    <h1 class="myjobs-title">Published <span class="gradient-text">Job Openings</span></h1>
+                    <p class="myjobs-subtitle">Monitor applicant pipelines, update job parameters, or close positions.</p>
+                </div>
 
-        <div class="top-section">
-
-            <div>
-                <h2>My Posted Jobs</h2>
-                <p class="subtitle">
-                    Manage your published jobs and applicants
-                </p>
+                <div class="header-right-actions">
+                    <a href="/recruiter/create" class="btn-create-new">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
+                        <span>Post New Job</span>
+                    </a>
+                </div>
             </div>
 
-            <% if(jobs.length> 0){ %>
+            <!-- CONTROLS STRIP -->
+            <div class="controls-card">
+                <div class="count-tag">
+                    <strong><%= jobs ? jobs.length : 0 %></strong> Active Postings
+                </div>
 
-                <form action="/recruiter/myJobs" method="GET">
-
-                    <select name="sortJobs" onchange="this.form.submit()" class="sort-select">
-
-                        <option value="">All Jobs</option>
-
-                        <option value="latest" <%=sortJobs==="latest" ? "selected" : "" %>>
-                            Latest
-                        </option>
-
-                        <option value="oldest" <%=sortJobs==="oldest" ? "selected" : "" %>>
-                            Oldest
-                        </option>
-
-                        <option value="highestpaying" <%=sortJobs==="highestpaying" ? "selected" : "" %>>
-                            Highest Paying
-                        </option>
-
-                        <option value="lowestpaying" <%=sortJobs==="lowestpaying" ? "selected" : "" %>>
-                            Lowest Paying
-                        </option>
-
-                        <option value="mostapplicants" <%=sortJobs==="mostapplicants" ? "selected" : "" %>>
-                            Most Applicants
-                        </option>
-
-                        <option value="leastapplicants" <%=sortJobs==="leastapplicants" ? "selected" : "" %>>
-                            Least Applicants
-                        </option>
-
-                    </select>
-
-                </form>
-
+                <% if (jobs && jobs.length > 0) { %>
+                    <form action="/recruiter/myJobs" method="GET" class="sort-form">
+                        <label for="sortJobs" class="sort-label">Sort by:</label>
+                        <select name="sortJobs" id="sortJobs" onchange="this.form.submit()" class="sort-select">
+                            <option value="">All (Default)</option>
+                            <option value="latest" <%= sortJobs === "latest" ? "selected" : "" %>>Newest First</option>
+                            <option value="oldest" <%= sortJobs === "oldest" ? "selected" : "" %>>Oldest First</option>
+                            <option value="highestpaying" <%= sortJobs === "highestpaying" ? "selected" : "" %>>Highest Paying</option>
+                            <option value="lowestpaying" <%= sortJobs === "lowestpaying" ? "selected" : "" %>>Lowest Paying</option>
+                            <option value="mostapplicants" <%= sortJobs === "mostapplicants" ? "selected" : "" %>>Most Applicants</option>
+                            <option value="leastapplicants" <%= sortJobs === "leastapplicants" ? "selected" : "" %>>Least Applicants</option>
+                        </select>
+                    </form>
                 <% } %>
+            </div>
 
-        </div>
-
-        <% if(typeof message !=="undefined" ){ %>
-
-            <p class="message">
-                <%= message %>
-            </p>
-
+            <% if (typeof message !== "undefined") { %>
+                <div class="alert-box error">
+                    <%= message %>
+                </div>
             <% } %>
 
-                <% if(jobs.length===0){ %>
-
-                    <div class="empty-state">
-                        <h3>No Jobs Created Yet</h3>
-                        <p>Start posting jobs and manage applicants easily.</p>
-
-                        <a href="/recruiter/create" class="create-btn">
-                            Create New Job
-                        </a>
-                    </div>
-
-                    <% } else { %>
-
-                        <div class="job-grid">
-
-                            <% jobs.forEach(function(job){ %>
-
-                                <div class="job-card">
-
-                                    <div class="job-header">
-
-                                        <div>
-                                            <h3>
-                                                <%= job.title %>
-                                            </h3>
-
-                                            <span class="badge">
-                                                <%= job.jobType %>
-                                            </span>
+            <!-- JOB GRID -->
+            <% if (!jobs || jobs.length === 0) { %>
+                <div class="empty-state-card">
+                    <div class="empty-icon-wrap">📢</div>
+                    <h2>No Jobs Created Yet</h2>
+                    <p>You haven't posted any jobs yet. Create your first opening to start receiving qualified candidates.</p>
+                    <a href="/recruiter/create" class="btn-post-now">Create Job Posting</a>
+                </div>
+            <% } else { %>
+                <div class="job-grid">
+                    <% jobs.forEach(function(job){ %>
+                        <div class="recruiter-job-card">
+                            <div class="card-header-bar">
+                                <div class="job-identity">
+                                    <div class="job-avatar">
+                                        <%= job.title ? job.title.charAt(0).toUpperCase() : 'J' %>
+                                    </div>
+                                    <div>
+                                        <h2 class="job-heading"><%= job.title %></h2>
+                                        <div class="job-sub-row">
+                                            <span class="sub-pill"><%= job.location || "N/A" %></span>
+                                            <span class="sub-pill"><%= job.experienceLevel %>+ yrs exp</span>
                                         </div>
-
-                                        <div class="salary">
-                                            ₹<%= job.salary %>
-                                        </div>
-
                                     </div>
-
-                                    <div class="job-info">
-
-                                        <p>
-                                            <strong>Location:</strong>
-                                            <%= job.location %>
-                                        </p>
-
-                                        <p>
-                                            <strong>Experience:</strong>
-                                            <%= job.experienceLevel %> years
-                                        </p>
-
-                                        <p>
-                                            <strong>Applicants:</strong>
-                                            <%= job.totalApplications %>
-                                        </p>
-
-                                    </div>
-
-                                    <div class="card-buttons">
-
-                                        <a href="/recruiter/<%= job._id %>/applications" class="btn applicants-btn">
-                                            Applicants
-                                        </a>
-
-                                        <a href="/recruiter/<%= job._id %>/update" class="btn update-btn">
-                                            Update
-                                        </a>
-
-                                        <a href="/recruiter/<%= job._id %>/delete"
-                                            class="btn delete-btn deleteBtn" data-job-id="<%=job._id%>">
-                                            Delete
-                                        </a>
-
-                                    </div>
-
                                 </div>
 
-                                <% }) %>
+                                <span class="badge-type <%= job.jobType.toLowerCase().replace(/\s+/g, '-') %>">
+                                    <%= job.jobType %>
+                                </span>
+                            </div>
 
+                            <div class="card-metrics-row">
+                                <div class="metric-item">
+                                    <span class="metric-label">Salary Range</span>
+                                    <span class="metric-val salary">₹<%= Number(job.salary).toLocaleString('en-IN') %> / yr</span>
+                                </div>
+                                <div class="metric-item">
+                                    <span class="metric-label">Total Applicants</span>
+                                    <span class="metric-val applicants-count">
+                                        <%= job.totalApplications !== undefined ? job.totalApplications : 0 %> Candidates
+                                    </span>
+                                </div>
+                            </div>
+
+                            <div class="card-buttons">
+                                <a href="/recruiter/<%= job._id %>/applications" class="btn applicants-btn">
+                                    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M23 21v-2a4 4 0 0 0-3-3.87"></path><path d="M16 3.13a4 4 0 0 1 0 7.75"></path></svg>
+                                    <span>Applicants (<%= job.totalApplications || 0 %>)</span>
+                                </a>
+
+                                <a href="/recruiter/<%= job._id %>/update" class="btn update-btn" title="Edit Job">
+                                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 20h9"></path><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"></path></svg>
+                                    <span>Edit</span>
+                                </a>
+
+                                <button class="btn delete-btn deleteBtn" data-job-id="<%= job._id %>" title="Delete Job" type="button">
+                                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path></svg>
+                                    <span>Delete</span>
+                                </button>
+                            </div>
                         </div>
-
-                        <% } %>
-
+                    <% }) %>
+                </div>
+            <% } %>
+        </div>
     </div>
 
     <script src="/javascripts/deletePost.js"></script>
-
 </body>
 
 </html>

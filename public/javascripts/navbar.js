@@ -438,3 +438,30 @@ notificationList.addEventListener(
 /* ---------------- INIT ---------------- */
 
 loadNotifications();
+
+
+/* ---------------- MOBILE DRAWER NAVIGATION ---------------- */
+const hamburgerBtn = document.getElementById("hamburgerBtn");
+const mobileNavDrawer = document.getElementById("mobileNavDrawer");
+const mobileNavClose = document.getElementById("mobileNavClose");
+
+if (hamburgerBtn && mobileNavDrawer) {
+    hamburgerBtn.addEventListener("click", (e) => {
+        e.stopPropagation();
+        mobileNavDrawer.classList.toggle("open");
+    });
+}
+
+if (mobileNavClose && mobileNavDrawer) {
+    mobileNavClose.addEventListener("click", () => {
+        mobileNavDrawer.classList.remove("open");
+    });
+}
+
+document.addEventListener("click", (e) => {
+    if (mobileNavDrawer && mobileNavDrawer.classList.contains("open")) {
+        if (!mobileNavDrawer.contains(e.target) && e.target !== hamburgerBtn) {
+            mobileNavDrawer.classList.remove("open");
+        }
+    }
+});

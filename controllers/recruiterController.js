@@ -409,7 +409,7 @@ async function SeeCandidate(req, res) {
         return res.status(200).render("SeeCandidate", {
             success: true,
             applicationId,
-            // user,
+            candidate: user,
             userResume: IfApplied.resumeUrl,
             applicant: IfApplied
         })

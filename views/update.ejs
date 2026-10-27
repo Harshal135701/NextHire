@@ -4,87 +4,129 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Update Job Post</title>
+    <title>Edit Job: <%= job.title %> | NextHire</title>
     <link rel="stylesheet" href="/stylesheets/navbar.css">
     <link rel="stylesheet" href="/stylesheets/update.css">
 </head>
 
 <body>
     <%- include("partials/navbar") %>
-        <a href="/recruiter/myjobs">Back</a>
-        <div class="container">
-            <h2>Update Job Post</h2>
 
-            <form id="updateJobForm">
+    <div class="update-page-wrapper">
+        <div class="update-container">
+            <!-- BREADCRUMB -->
+            <a href="/recruiter/myjobs" class="back-link">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="15 18 9 12 15 6"></polyline></svg>
+                <span>Back to Published Jobs</span>
+            </a>
 
-                <label for="title">Job Title</label>
-                <input type="text" id="title" value="<%= job.title %>" required>
+            <!-- UPDATE CARD -->
+            <div class="update-card">
+                <div class="card-header">
+                    <span class="badge-edit">Edit Mode</span>
+                    <h1 class="card-title">Update Job Posting</h1>
+                    <p class="card-subtitle">Modify parameters for <strong><%= job.title %></strong>. Changes are reflected live immediately.</p>
+                </div>
 
-                <label for="description">Description</label>
-                <textarea id="description" rows="5" required><%= job.description %></textarea>
+                <form id="updateJobForm" class="update-form">
+                    <div class="form-grid-2">
+                        <div class="form-group">
+                            <label for="title">Job Title <span class="required">*</span></label>
+                            <input type="text" id="title" value="<%= job.title %>" required>
+                        </div>
 
-                <label for="company">Company</label>
-                <input type="text" id="company" value="<%= job.company %>" required>
+                        <div class="form-group">
+                            <label for="company">Company Name <span class="required">*</span></label>
+                            <input type="text" id="company" value="<%= job.company %>" required>
+                        </div>
+                    </div>
 
-                <label for="location">Location</label>
-                <input type="text" id="location" value="<%= job.location %>" required>
+                    <div class="form-grid-3">
+                        <div class="form-group">
+                            <label for="location">Location <span class="required">*</span></label>
+                            <input type="text" id="location" value="<%= job.location %>" required>
+                        </div>
 
-                <label for="salary">Salary</label>
-                <input type="number" id="salary" value="<%= job.salary %>" required>
+                        <div class="form-group">
+                            <label for="salary">Annual Salary (₹) <span class="required">*</span></label>
+                            <input type="number" id="salary" value="<%= job.salary %>" min="0" required>
+                        </div>
 
-                <label for="jobType">Job Type</label>
-                <select id="jobType" required>
-                    <option value="Full-time" <%=job.jobType==="Full-time" ? "selected" : "" %>>Full-time</option>
-                    <option value="Part-time" <%=job.jobType==="Part-time" ? "selected" : "" %>>Part-time</option>
-                    <option value="Internship" <%=job.jobType==="Internship" ? "selected" : "" %>>Internship</option>
-                    <option value="Remote" <%=job.jobType==="Remote" ? "selected" : "" %>>Remote</option>
-                </select>
+                        <div class="form-group">
+                            <label for="experienceLevel">Experience (Years) <span class="required">*</span></label>
+                            <input type="number" id="experienceLevel" value="<%= job.experienceLevel %>" min="0" required>
+                        </div>
+                    </div>
 
-                <label for="experienceLevel">Experience Level</label>
-                <input type="number" id="experienceLevel" value="<%= job.experienceLevel %>" required>
+                    <div class="form-grid-2">
+                        <div class="form-group">
+                            <label for="jobType">Employment Type <span class="required">*</span></label>
+                            <select id="jobType" required>
+                                <option value="Full-time" <%= job.jobType === "Full-time" ? "selected" : "" %>>Full-time</option>
+                                <option value="Part-time" <%= job.jobType === "Part-time" ? "selected" : "" %>>Part-time</option>
+                                <option value="Internship" <%= job.jobType === "Internship" ? "selected" : "" %>>Internship</option>
+                                <option value="Remote" <%= job.jobType === "Remote" ? "selected" : "" %>>Remote</option>
+                            </select>
+                        </div>
 
-                <button type="submit">Update Job</button>
-            </form>
+                        <div class="form-group">
+                            <label for="category">Category</label>
+                            <input type="text" id="category" value="<%= job.category || '' %>" placeholder="e.g. Frontend, Backend">
+                        </div>
+                    </div>
+
+                    <div class="form-group full-width">
+                        <label for="description">Job Description <span class="required">*</span></label>
+                        <textarea id="description" rows="8" required><%= job.description %></textarea>
+                    </div>
+
+                    <div class="form-actions">
+                        <a href="/recruiter/myjobs" class="btn-cancel">Cancel</a>
+                        <button type="submit" class="btn-save-changes">
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"></polyline></svg>
+                            <span>Save & Update</span>
+                        </button>
+                    </div>
+                </form>
+            </div>
         </div>
+    </div>
 
-        <!-- <script>
-            document.getElementById("updateJobForm").addEventListener("submit", async function (e) {
-                e.preventDefault()
-                // Stop the browser default behavior
+    <script>
+        document.getElementById("updateJobForm").addEventListener("submit", async function (e) {
+            e.preventDefault();
 
-                const updatedFields = {
-                    title: document.getElementById("title").value,
-                    description: document.getElementById("description").value,
-                    company: document.getElementById("company").value,
-                    location: document.getElementById("location").value,
-                    salary: document.getElementById("salary").value,
-                    jobType: document.getElementById("jobType").value,
-                    experienceLevel: document.getElementById("experienceLevel").value
+            const updatedFields = {
+                title: document.getElementById("title").value,
+                description: document.getElementById("description").value,
+                company: document.getElementById("company").value,
+                location: document.getElementById("location").value,
+                salary: document.getElementById("salary").value,
+                jobType: document.getElementById("jobType").value,
+                experienceLevel: document.getElementById("experienceLevel").value,
+                category: document.getElementById("category") ? document.getElementById("category").value : ""
+            };
+
+            try {
+                const response = await fetch("/recruiter/<%= job._id %>/update", {
+                    method: "PUT",
+                    headers: {
+                        "Content-Type": "application/json"
+                    },
+                    body: JSON.stringify(updatedFields)
+                });
+
+                const data = await response.json();
+                alert(data.message);
+
+                if (data.success) {
+                    window.location.href = "/recruiter/myjobs";
                 }
-                try {
-
-
-                    const respose = await fetch("/recruiter/<%=job._id%>/update", {
-                        method: "PUT",
-                        headers: {
-                            "Content-Type": "Application/Json"
-                        },
-                        body: JSON.stringify(updatedFields)
-                    })
-
-                    const data = await respose.json()
-
-                    alert(data.message)
-
-                    if (data.success) {
-                        window.location.href = "/recruiter/myjobs";
-                    }
-                }
-                catch (err) {
-                    alert("something went wrong");
-                }
-            })
-        </script> -->
+            } catch (err) {
+                alert("Something went wrong while updating this position.");
+            }
+        });
+    </script>
 </body>
 
 </html>

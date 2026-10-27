@@ -4,66 +4,149 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>Apply for <%= job.title %> | NextHire</title>
     <link rel="stylesheet" href="/stylesheets/navbar.css">
     <link rel="stylesheet" href="/stylesheets/JobPostFullPage.css">
 </head>
 
 <body>
     <%- include("partials/navbar") %>
-        <div class="page-container">
-            <div class="job-card">
 
-                <h1 class="job-title">
-                    <%= job.title %>
-                </h1>
+    <div class="apply-page-wrapper">
+        <div class="apply-container">
+            <!-- BREADCRUMB -->
+            <a href="/jobs/<%= job._id %>" class="back-link">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="15 18 9 12 15 6"></polyline></svg>
+                <span>Back to Job Details</span>
+            </a>
 
-                <div class="job-meta">
-                    <span><strong>Company:</strong>
-                        <%= job.company %>
-                    </span>
-                    <span><strong>Location:</strong>
+            <!-- JOB RECAP CARD -->
+            <div class="job-recap-card">
+                <div class="recap-header">
+                    <div class="company-badge-medium">
+                        <%= job.company ? job.company.charAt(0).toUpperCase() : 'C' %>
+                    </div>
+                    <div>
+                        <div class="company-tag"><%= job.company %></div>
+                        <h1 class="recap-job-title"><%= job.title %></h1>
+                    </div>
+                </div>
+
+                <div class="recap-chips-row">
+                    <span class="recap-chip">
+                        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg>
                         <%= job.location %>
                     </span>
-                </div>
-
-                <div class="job-details">
-                    <p><strong>Salary:</strong> ₹<%= job.salary %>
-                    </p>
-                    <p><strong>Job Type:</strong>
+                    <span class="recap-chip">
+                        ₹<%= Number(job.salary).toLocaleString('en-IN') %> / yr
+                    </span>
+                    <span class="recap-chip">
                         <%= job.jobType %>
-                    </p>
-                    <p><strong>Experience:</strong>
-                        <%= job.experienceLevel %> years
-                    </p>
-                    <p><strong>Category:</strong>
-                        <%= job.category %>
-                    </p>
+                    </span>
+                    <span class="recap-chip">
+                        <%= job.experienceLevel %>+ yrs exp
+                    </span>
+                </div>
+            </div>
+
+            <!-- APPLICATION FORM CARD -->
+            <div class="apply-card">
+                <div class="form-header">
+                    <h2>Submit Your Application</h2>
+                    <p>Upload your up-to-date resume in PDF format to complete your application for this position.</p>
                 </div>
 
-                <div class="description">
-                    <h3>Description</h3>
-                    <p>
-                        <%= job.description %>
-                    </p>
-                </div>
+                <% if (typeof message !== 'undefined') { %>
+                    <div class="alert-box error">
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="8" x2="12" y2="12"></line><line x1="12" y1="16" x2="12.01" y2="16"></line></svg>
+                        <span><%= message %></span>
+                    </div>
+                <% } %>
 
+                <form class="apply-form" action="/applications/apply/<%= job._id %>" method="POST" enctype="multipart/form-data">
+                    <div class="form-group">
+                        <label class="field-label">
+                            <span>Candidate Resume</span>
+                            <span class="badge-required">Required (PDF)</span>
+                        </label>
 
-                <% if (typeof message!=='undefined') { %>
-                    <p class="error">
-                        <%= message %>
-                    </p>
-                    <% } %>
+                        <!-- STYLED UPLOAD DROPZONE -->
+                        <div class="upload-dropzone" id="dropzone">
+                            <input type="file" name="resumeUrl" id="resumeInput" accept=".pdf" required class="hidden-file-input">
+                            <div class="dropzone-inner" id="dropzoneContent">
+                                <div class="upload-icon-box">
+                                    <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="17 8 12 3 7 8"></polyline><line x1="12" y1="3" x2="12" y2="15"></line></svg>
+                                </div>
+                                <div class="dropzone-text">
+                                    <strong>Click to upload</strong> or drag and drop your file
+                                </div>
+                                <span class="dropzone-hint">PDF file only (Maximum 10 MB)</span>
+                            </div>
 
-                        <form class="apply-form" action="/applications/apply/<%= job._id %>" method="POST"
-                            enctype="multipart/form-data">
-                            <label>Upload Resume (PDF)</label>
-                            <input type="file" name="resumeUrl" required>
-                            <button type="submit">Apply Now</button>
-                        </form>
+                            <div class="file-selected-preview" id="filePreview" style="display: none;">
+                                <div class="file-info-row">
+                                    <span class="pdf-icon">PDF</span>
+                                    <span class="selected-filename" id="selectedFilename"></span>
+                                </div>
+                                <span class="change-file-btn">Change file</span>
+                            </div>
+                        </div>
+                    </div>
 
+                    <div class="applicant-details-summary">
+                        <div class="summary-header">Applicant Information</div>
+                        <div class="details-grid">
+                            <div class="detail-item">
+                                <span class="detail-label">Full Name</span>
+                                <span class="detail-value"><%= user.fullname %></span>
+                            </div>
+                            <div class="detail-item">
+                                <span class="detail-label">Email Address</span>
+                                <span class="detail-value"><%= user.email %></span>
+                            </div>
+                            <div class="detail-item">
+                                <span class="detail-label">Current Occupation</span>
+                                <span class="detail-value"><%= user.occupation || 'Not specified' %></span>
+                            </div>
+                            <div class="detail-item">
+                                <span class="detail-label">Experience</span>
+                                <span class="detail-value"><%= user.experience %> Years</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="terms-note">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="16" x2="12" y2="12"></line><line x1="12" y1="8" x2="12.01" y2="8"></line></svg>
+                        <span>Your resume and profile will be submitted directly to <%= job.company %> for review. You can track this application in your dashboard.</span>
+                    </div>
+
+                    <button type="submit" class="submit-application-btn">
+                        <span>Submit Application</span>
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"></polyline></svg>
+                    </button>
+                </form>
             </div>
         </div>
+    </div>
+
+    <script>
+        const resumeInput = document.getElementById('resumeInput');
+        const dropzone = document.getElementById('dropzone');
+        const dropzoneContent = document.getElementById('dropzoneContent');
+        const filePreview = document.getElementById('filePreview');
+        const selectedFilename = document.getElementById('selectedFilename');
+
+        if (resumeInput) {
+            resumeInput.addEventListener('change', function() {
+                if (this.files && this.files.length > 0) {
+                    const file = this.files[0];
+                    selectedFilename.textContent = file.name;
+                    dropzoneContent.style.display = 'none';
+                    filePreview.style.display = 'flex';
+                }
+            });
+        }
+    </script>
 </body>
 
 </html>

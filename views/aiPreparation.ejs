@@ -4,51 +4,83 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AI Interview Preparation</title>
-
+    <title>AI Interview Preparation | NextHire</title>
     <link rel="stylesheet" href="/stylesheets/navbar.css">
     <link rel="stylesheet" href="/stylesheets/aiPreparation.css">
 </head>
 
 <body>
-
     <%- include("partials/navbar") %>
 
-    <div class="ai-container">
+    <div class="ai-page-wrapper">
+        <div class="ai-container">
+            <!-- HEADER -->
+            <div class="ai-header">
+                <span class="ai-badge">NextHire Intelligence</span>
+                <h1 class="ai-title">AI Interview <span class="gradient-text">Preparation Hub</span></h1>
+                <p class="ai-subtitle">
+                    Generate targeted interview questions, technical scenarios, and concise answer guides for internships, junior, and senior tech roles.
+                </p>
+            </div>
 
-        <div class="ai-header">
-            <h1>AI Interview Preparation</h1>
-            <p>
-                Generate important interview questions and concise answers
-                for internships and placements.
-            </p>
+            <!-- PROMPT FORM CARD -->
+            <div class="ai-prompt-card">
+                <form id="candidatePrompt" class="ai-form">
+                    <div class="input-container">
+                        <svg class="search-ai-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+                        <input
+                            type="text"
+                            placeholder="Example: Senior Backend Developer at FAANG, Frontend React Intern, or Cloud Architect"
+                            id="inputPrompt"
+                            autocomplete="off"
+                            required
+                        >
+                        <button type="submit" class="generate-btn">
+                            <span class="sparkle">✨</span>
+                            <span>Generate Questions</span>
+                        </button>
+                    </div>
+                </form>
+
+                <!-- QUICK PROMPT SUGGESTIONS -->
+                <div class="prompt-suggestions">
+                    <span class="suggestion-label">Try asking:</span>
+                    <button type="button" class="suggestion-chip" onclick="setPrompt('Full Stack MERN Developer with 2 years experience')">MERN Developer (2 yrs)</button>
+                    <button type="button" class="suggestion-chip" onclick="setPrompt('React & TypeScript Frontend Internship')">React Frontend Intern</button>
+                    <button type="button" class="suggestion-chip" onclick="setPrompt('System Design & Microservices for High Traffic Apps')">System Design Scenarios</button>
+                    <button type="button" class="suggestion-chip" onclick="setPrompt('DevOps Engineer with Docker & Kubernetes')">DevOps & Kubernetes</button>
+                </div>
+            </div>
+
+            <!-- OUTPUT BOX -->
+            <div class="result-wrapper">
+                <div class="result-header">
+                    <div class="result-header-left">
+                        <span class="ai-model-tag">Gemini 2.5 AI Response</span>
+                    </div>
+                </div>
+
+                <div id="result" class="result-box">
+                    <div class="placeholder-guide">
+                        <div class="guide-icon">💡</div>
+                        <h3>Your custom interview questions will appear here</h3>
+                        <p>Type a target role above and click <strong>Generate Questions</strong> to get comprehensive technical questions with structured answers and interview pointers.</p>
+                    </div>
+                </div>
+            </div>
         </div>
-
-        <form id="candidatePrompt" class="ai-form">
-
-            <input
-                type="text"
-                placeholder="Example: Backend Developer Internship at FAANG"
-                id="inputPrompt"
-                autocomplete="off"
-            >
-
-            <button type="submit" class="generate-btn">
-                Generate Questions
-            </button>
-
-        </form>
-
-        <div id="loading" class="loading-text">
-            Generating interview questions...
-        </div>
-
-        <div id="result" class="result-box"></div>
-
     </div>
 
     <script src="/javascripts/aiPreparation.js"></script>
-
+    <script>
+        function setPrompt(text) {
+            const input = document.getElementById('inputPrompt');
+            if (input) {
+                input.value = text;
+                input.focus();
+            }
+        }
+    </script>
 </body>
 
 </html>

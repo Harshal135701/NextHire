@@ -99,15 +99,19 @@ async function loginUser(req, res) {
 
 async function profilePage(req, res) {
     try {
+        const featuredJobs = await jobSchema.find().sort({ createdAt: -1 }).limit(6);
+        const totalJobs = await jobSchema.countDocuments();
         return res.status(200).render("home", {
-            //    user
-        })
+            featuredJobs: featuredJobs || [],
+            totalJobs: totalJobs || 0
+        });
     }
     catch (err) {
         return res.status(500).render("home", {
-            // user: req.user,
+            featuredJobs: [],
+            totalJobs: 0,
             message: err.message
-        })
+        });
     }
 }
 
