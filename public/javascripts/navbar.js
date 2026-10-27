@@ -444,24 +444,45 @@ loadNotifications();
 const hamburgerBtn = document.getElementById("hamburgerBtn");
 const mobileNavDrawer = document.getElementById("mobileNavDrawer");
 const mobileNavClose = document.getElementById("mobileNavClose");
+const mobileDrawerBackdrop = document.getElementById("mobileDrawerBackdrop");
+
+function closeMobileDrawer() {
+    if (mobileNavDrawer) mobileNavDrawer.classList.remove("open");
+    if (mobileDrawerBackdrop) mobileDrawerBackdrop.classList.remove("active");
+}
+
+function openMobileDrawer() {
+    if (mobileNavDrawer) mobileNavDrawer.classList.add("open");
+    if (mobileDrawerBackdrop) mobileDrawerBackdrop.classList.add("active");
+}
 
 if (hamburgerBtn && mobileNavDrawer) {
     hamburgerBtn.addEventListener("click", (e) => {
         e.stopPropagation();
-        mobileNavDrawer.classList.toggle("open");
+        if (mobileNavDrawer.classList.contains("open")) {
+            closeMobileDrawer();
+        } else {
+            openMobileDrawer();
+        }
     });
 }
 
-if (mobileNavClose && mobileNavDrawer) {
+if (mobileNavClose) {
     mobileNavClose.addEventListener("click", () => {
-        mobileNavDrawer.classList.remove("open");
+        closeMobileDrawer();
+    });
+}
+
+if (mobileDrawerBackdrop) {
+    mobileDrawerBackdrop.addEventListener("click", () => {
+        closeMobileDrawer();
     });
 }
 
 document.addEventListener("click", (e) => {
     if (mobileNavDrawer && mobileNavDrawer.classList.contains("open")) {
         if (!mobileNavDrawer.contains(e.target) && e.target !== hamburgerBtn) {
-            mobileNavDrawer.classList.remove("open");
+            closeMobileDrawer();
         }
     }
 });
